@@ -13,6 +13,7 @@
 
 #include "Utility/mikktspace.h"
 #include "Utility/meshoptimizer/meshoptimizer.h"
+#include "iostream"
 
 #if __has_include("OpenImageDenoise/oidn.hpp")
 #include "OpenImageDenoise/oidn.hpp"
@@ -635,6 +636,7 @@ namespace wi::scene
 			uint32_t first_subset = 0;
 			uint32_t last_subset = 0;
 			GetLODSubsetRange(0, first_subset, last_subset);
+			
 			for (uint32_t subsetIndex = first_subset; subsetIndex < last_subset; ++subsetIndex)
 			{
 				const MeshComponent::MeshSubset& subset = subsets[subsetIndex];
@@ -656,6 +658,7 @@ namespace wi::scene
 			context.m_pUserData = &userdata;
 			tbool mikktspace_result = genTangSpaceDefault(&context);
 			assert(mikktspace_result == 1);
+
 
 #else
 			// Old tangent generation logic:
@@ -732,7 +735,6 @@ namespace wi::scene
 			}
 #endif
 		}
-
 		// SV_PrimitiveID avoiding workaround: provoking vertex can refer to triangel index
 		//	SV_PrimitiveID needs geometry shader emulation on some platforms (on PC is can happen automatically by driver), but with this that can be avoided.
 		wi::vector<unsigned int> provoke(indices.size()); // mesh needs to be drawn with this as index buffer when SV_PrimitiveID is required
@@ -782,7 +784,6 @@ namespace wi::scene
 				position_format = vertex_windweights.empty() ? Vertex_POS32::FORMAT : Vertex_POS32W::FORMAT; // failed, increase to 32 bits
 				break; // since 32 bit is the max, we can bail out
 			}
-
 			if (IsFormatUnorm(position_format))
 			{
 				// This is done to avoid 0 scaling on any axis of the UNORM remap matrix of the AABB
@@ -807,6 +808,7 @@ namespace wi::scene
 			}
 		}
 
+
 #ifdef __APPLE__
 		if (position_format == Vertex_POS32::FORMAT)
 		{
@@ -814,7 +816,6 @@ namespace wi::scene
 			position_format = Vertex_POS32W::FORMAT;
 		}
 #endif // __APPLE__
-
 		// Determine UV range for normalization:
 		size_t uv_stride = sizeof(Vertex_UVS);
 		Format uv_format = Vertex_UVS::FORMAT;
@@ -840,7 +841,6 @@ namespace wi::scene
 				uv_format = Vertex_UVS32::FORMAT;
 			}
 		}
-
 		const size_t position_stride = GetFormatStride(position_format);
 
 		GPUBufferDesc bd;
@@ -873,7 +873,6 @@ namespace wi::scene
 			align(uint64_t(vertex_boneindices.size() * sizeof(Vertex_BON)), alignment) +
 			align(uint64_t(vertex_boneindices2.size() * sizeof(Vertex_BON)), alignment)
 			;
-
 		constexpr Format morph_format = Format::R16G16B16A16_FLOAT;
 		constexpr size_t morph_stride = GetFormatStride(morph_format);
 		for (MorphTarget& morph : morph_targets)
@@ -887,7 +886,6 @@ namespace wi::scene
 				bd.size += align(uint64_t(vertex_normals.size() * morph_stride), alignment);
 			}
 		}
-
 		wi::vector<ShaderCluster> clusters;
 		wi::vector<ShaderClusterBounds> cluster_bounds;
 		cluster_ranges.clear();
@@ -933,7 +931,6 @@ namespace wi::scene
 
 					clusters.reserve(clusters.size() + meshlet_count);
 					cluster_bounds.reserve(cluster_bounds.size() + meshlet_count);
-
 					meshlet_range.clusterOffset = (uint32_t)clusters.size();
 					meshlet_range.clusterCount = (uint32_t)meshlet_count;
 
@@ -990,14 +987,12 @@ namespace wi::scene
 					}
 				}
 			}
-
 			bd.size = align(bd.size, uint64_t(sizeof(ShaderCluster)));
 			bd.size = align(uint64_t(bd.size + clusters.size() * sizeof(ShaderCluster)), alignment);
 
 			bd.size = align(bd.size, uint64_t(sizeof(ShaderClusterBounds)));
 			bd.size = align(uint64_t(bd.size + cluster_bounds.size() * sizeof(ShaderClusterBounds)), alignment);
 		}
-
 		auto init_callback = [&](void* dest) {
 			uint8_t* buffer_data = (uint8_t*)dest;
 			uint64_t buffer_offset = 0ull;
@@ -1057,7 +1052,6 @@ namespace wi::scene
 				assert(0);
 				break;
 			}
-
 			// Create provoking index buffer GPU data:
 			if (GetProvokingIndexFormat() == IndexBufferFormat::UINT32)
 			{
@@ -1078,7 +1072,6 @@ namespace wi::scene
 					std::memcpy(indexdata + i, &provoke[i], sizeof(uint16_t));
 				}
 			}
-
 			// Create reorder index buffer GPU data:
 			if (GetIndexFormat() == IndexBufferFormat::UINT32)
 			{
@@ -1099,7 +1092,6 @@ namespace wi::scene
 					std::memcpy(indexdata + i, &reorder[i], sizeof(uint16_t));
 				}
 			}
-
 			// Create index buffer GPU data:
 			if (GetIndexFormat() == IndexBufferFormat::UINT32)
 			{
@@ -1120,7 +1112,6 @@ namespace wi::scene
 					std::memcpy(indexdata + i, &indices[i], sizeof(uint16_t));
 				}
 			}
-
 			// vertexBuffer - NORMALS:
 			if (!vertex_normals.empty())
 			{
@@ -1150,7 +1141,6 @@ namespace wi::scene
 					std::memcpy(vertices + i, &vert, sizeof(vert));
 				}
 			}
-
 			// vertexBuffer - UV SETS
 			if (!vertex_uvset_0.empty() || !vertex_uvset_1.empty())
 			{
@@ -1214,7 +1204,6 @@ namespace wi::scene
 					std::memcpy(vertices + i, &vert, sizeof(vert));
 				}
 			}
-
 			// bone reference buffers (skinning, soft body):
 			if (!vertex_boneindices.empty())
 			{
@@ -1280,7 +1269,6 @@ namespace wi::scene
 					}
 				}
 			}
-
 			// morph buffers:
 			if (!morph_targets.empty())
 			{
@@ -1356,7 +1344,6 @@ namespace wi::scene
 				buffer_offset += align(vb_bou.size, alignment);
 			}
 		};
-
 		// The suballocation strategy is used to have all mesh buffers reside in a global buffer
 		//	With this we can avoid rebinding the index buffer for every mesh and can work with purely offsets
 		//	Though the index buffer will still need to be rebound if the index format changes, but that happens less frequently
@@ -1376,7 +1363,6 @@ namespace wi::scene
 			assert(success);
 			device->SetName(&generalBuffer, "MeshComponent::generalBuffer");
 		}
-
 		const Format ib_format = GetIndexFormat() == IndexBufferFormat::UINT32 ? Format::R32_UINT : Format::R16_UINT;
 
 		assert(ib_reorder.IsValid());

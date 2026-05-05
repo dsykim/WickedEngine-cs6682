@@ -31,6 +31,7 @@ DEFINE_GUID(D3D12_VIDEO_DECODE_PROFILE_HEVC_MAIN, 0x5b11d51b, 0x2f4c, 0x4452, 0x
 
 #include <sstream>
 #include <algorithm>
+#include <iostream>
 #include <intrin.h> // _BitScanReverse64
 
 using namespace Microsoft::WRL;
@@ -1591,16 +1592,14 @@ std::mutex queue_locker;
 	}
 	void GraphicsDevice_DX12::CommandQueue::submit()
 	{
-		if (queue == nullptr)
-			return;
-		if (submit_cmds.empty())
-			return;
-
+		if (queue == nullptr){
+			return;}
+		if (submit_cmds.empty()){
+			return;}
 		queue->ExecuteCommandLists(
 			(UINT)submit_cmds.size(),
 			submit_cmds.data()
 		);
-
 		submit_cmds.clear();
 	}
 
@@ -3268,53 +3267,58 @@ std::mutex queue_locker;
 #ifdef PLATFORM_XBOX
 		wi::graphics::xbox::ApplyBufferCreationFlags(*desc, resourceDesc.Flags, allocationDesc.ExtraHeapFlags);
 #endif // PLATFORM_XBOX
-
 		if (has_flag(desc->misc_flags, ResourceMiscFlag::ALIASING_BUFFER) ||
 			has_flag(desc->misc_flags, ResourceMiscFlag::ALIASING_TEXTURE_NON_RT_DS) ||
 			has_flag(desc->misc_flags, ResourceMiscFlag::ALIASING_TEXTURE_RT_DS))
 		{
-			// Aliasing memory pool must not be a committed resource because that uses implicit heap which returns nullptr,
-			//	thus it cannot be offsetted. This is why we create custom allocation here which will never be committed resource
-			//	(since it has no resource)
+			return false;
+
 			D3D12_RESOURCE_ALLOCATION_INFO allocationInfo = device->GetResourceAllocationInfo(0, 1, &resourceDesc);
 
-			// D3D12MA ValidateAllocateMemoryParameters requires this, wasn't always true on Xbox:
 			allocationInfo.SizeInBytes = align(allocationInfo.SizeInBytes, (UINT64)D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT);
 			allocationInfo.Alignment = std::max(allocationInfo.Alignment, (UINT64)D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT);
-
 			if (resource_heap_tier >= D3D12_RESOURCE_HEAP_TIER_2)
 			{
-				allocationDesc.ExtraHeapFlags = D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES;
+					allocationDesc.ExtraHeapFlags = D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES;
 			}
 			else if (has_flag(desc->misc_flags, ResourceMiscFlag::ALIASING_BUFFER))
 			{
-				allocationDesc.ExtraHeapFlags = D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS;
+					allocationDesc.ExtraHeapFlags = D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS;
 			}
 			else if (has_flag(desc->misc_flags, ResourceMiscFlag::ALIASING_TEXTURE_NON_RT_DS))
 			{
-				allocationDesc.ExtraHeapFlags = D3D12_HEAP_FLAG_ALLOW_ONLY_NON_RT_DS_TEXTURES;
+					allocationDesc.ExtraHeapFlags = D3D12_HEAP_FLAG_ALLOW_ONLY_NON_RT_DS_TEXTURES;
 			}
 			else if (has_flag(desc->misc_flags, ResourceMiscFlag::ALIASING_TEXTURE_RT_DS))
 			{
-				allocationDesc.ExtraHeapFlags = D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
+					allocationDesc.ExtraHeapFlags = D3D12_HEAP_FLAG_ALLOW_ONLY_RT_DS_TEXTURES;
 			}
+			// Don't use dx12_check here — AllocateMemory can legitimately fail on
+			// heap tier 1 hardware. Return false so the caller can fall back.
+			hr = allocationhandler->allocator->AllocateMemory(
+					&allocationDesc,
+					&allocationInfo,
+					&internal_state->allocation
+			);
+			if (FAILED(hr)) {
+					return false;
+			}		
 
-			hr = dx12_check(allocationhandler->allocator->AllocateMemory(
-				&allocationDesc,
-				&allocationInfo,
-				&internal_state->allocation
-			));
-
-			if (allocationDesc.ExtraHeapFlags == D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS || allocationDesc.ExtraHeapFlags == D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES)
+			if (allocationDesc.ExtraHeapFlags == D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS ||
+					allocationDesc.ExtraHeapFlags == D3D12_HEAP_FLAG_ALLOW_ALL_BUFFERS_AND_TEXTURES)
 			{
-				hr = dx12_check(device->CreatePlacedResource(
-					internal_state->allocation->GetHeap(),
-					internal_state->allocation->GetOffset(),
-					&resourceDesc,
-					resourceState,
-					nullptr,
-					PPV_ARGS(internal_state->resource)
-				));
+					// Same — CreatePlacedResource can fail on tier 1, return false gracefully.
+					hr = device->CreatePlacedResource(
+							internal_state->allocation->GetHeap(),
+							internal_state->allocation->GetOffset(),
+							&resourceDesc,
+							resourceState,
+							nullptr,
+							PPV_ARGS(internal_state->resource)
+					);
+					if (FAILED(hr)) {
+						return false;
+					}
 			}
 		}
 		else if (has_flag(desc->misc_flags, ResourceMiscFlag::SPARSE))
@@ -3356,10 +3360,8 @@ std::mutex queue_locker;
 			}
 
 		}
-
 		if (!SUCCEEDED(hr))
 			return false;
-
 		if (internal_state->resource != nullptr)
 		{
 			internal_state->gpu_address = internal_state->resource->GetGPUVirtualAddress();
@@ -3376,7 +3378,6 @@ std::mutex queue_locker;
 			hr = dx12_check(internal_state->resource->Map(0, &read_range, &buffer->mapped_data));
 			buffer->mapped_size = static_cast<uint32_t>(desc->size);
 		}
-
 		// Issue data copy on request:
 		if (init_callback != nullptr)
 		{
@@ -3407,7 +3408,6 @@ std::mutex queue_locker;
 			}
 		}
 
-
 		// Create resource views if needed
 		if (!has_flag(desc->misc_flags, ResourceMiscFlag::NO_DEFAULT_DESCRIPTORS))
 		{
@@ -3437,7 +3437,6 @@ std::mutex queue_locker;
 			uav_desc.Buffer.NumElements = uint32_t(desc->size / sizeof(uint32_t));
 			internal_state->uav_raw.init(this, uav_desc, internal_state->resource.Get());
 		}
-
 		return SUCCEEDED(hr);
 	}
 	bool GraphicsDevice_DX12::CreateTexture(const TextureDesc* desc, const SubresourceData* initial_data, Texture* texture, const GPUResource* alias, uint64_t alias_offset) const
@@ -5417,7 +5416,6 @@ std::mutex queue_locker;
 				}
 				commandlist.pipelines_worker.clear();
 			}
-
 			// Mark the completion of queues for this frame:
 			frame_fence_values[GetBufferIndex()]++;
 			for (int q = 0; q < QUEUE_COUNT; ++q)
@@ -5425,12 +5423,9 @@ std::mutex queue_locker;
 				CommandQueue& queue = queues[q];
 				if (queue.queue == nullptr)
 					continue;
-
 				queue.submit();
-
 				dx12_check(queue.queue->Signal(frame_fence[GetBufferIndex()][q].Get(), frame_fence_values[GetBufferIndex()]));
 			}
-
 			for (uint32_t cmd = 0; cmd < cmd_last; ++cmd)
 			{
 				CommandList_DX12& commandlist = *commandlists[cmd];
@@ -5470,7 +5465,6 @@ std::mutex queue_locker;
 				}
 			}
 		}
-
 		// Sync up every queue to every other queue at the end of the frame:
 		//	Note: it disables overlapping queues into the next frame
 		for (int queue1 = 0; queue1 < QUEUE_COUNT; ++queue1)
@@ -5487,7 +5481,6 @@ std::mutex queue_locker;
 				queues[queue1].queue->Wait(fence, frame_fence_values[GetBufferIndex()]);
 			}
 		}
-
 		descriptorheap_res.SignalGPU(queues[QUEUE_GRAPHICS].queue.Get());
 		descriptorheap_sam.SignalGPU(queues[QUEUE_GRAPHICS].queue.Get());
 
@@ -5508,7 +5501,6 @@ std::mutex queue_locker;
 				dx12_check(fence->SetEventOnCompletion(frame_fence_values[GetBufferIndex()], nullptr));
 			}
 		}
-
 		allocationhandler->Update(FRAMECOUNT, BUFFERCOUNT);
 	}
 

@@ -7,6 +7,7 @@
 #include "Utility/dds.h"
 #include <wiHelper.h>
 #include <wiUnorderedSet.h>
+#include <iostream>
 
 #define TINYGLTF_IMPLEMENTATION
 #define TINYGLTF_NO_STB_IMAGE
@@ -1620,7 +1621,9 @@ void ImportModel_GLTF(const std::string& fileName, Scene& scene)
 		}
 
 		ImportMetadata(state, meshEntity, x.extras);
+		std::cout << "Calling mesh.CreateRenderData() for: " << x.name << "\n" << std::flush;
 		mesh.CreateRenderData(); // tangents are generated inside if needed, which must be done before FlipZAxis!
+	  std::cout << "CreateRenderData OK\n" << std::flush;
 	}
 
 	// Create armatures:

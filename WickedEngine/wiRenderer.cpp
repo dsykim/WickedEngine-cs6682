@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <atomic>
 #include <mutex>
+#include <iostream>
 
 #ifdef _WIN32
 #include <malloc.h> // alloca
@@ -2787,26 +2788,37 @@ BufferSuballocation SuballocateGPUBuffer(uint64_t size)
 	{
 		desc.usage = Usage::DEFAULT;
 	}
+
 	desc.bind_flags = BindFlag::SHADER_RESOURCE | BindFlag::VERTEX_BUFFER | BindFlag::INDEX_BUFFER | BindFlag::UNORDERED_ACCESS;
 	desc.misc_flags = ResourceMiscFlag::ALIASING_BUFFER | ResourceMiscFlag::NO_DEFAULT_DESCRIPTORS;
 	if (device->CheckCapability(GraphicsDeviceCapability::RAYTRACING))
 	{
 		desc.misc_flags |= ResourceMiscFlag::RAY_TRACING;
 	}
+
 	desc.alignment = device->GetMinOffsetAlignment(&desc);
 	auto& block = suballocator.blocks.emplace_back();
 	bool success = device->CreateBuffer(&desc, nullptr, &block.buffer);
-	assert(success);
+
+	// assert(success);
+	if (!success) {
+    suballocator.blocks.pop_back();
+    return {};  // invalid allocation — CreateRenderData will use standalone buffer
+	}
+
 	device->SetName(&block.buffer, "GPUSubAllocator");
 	block.allocator.init(desc.size, (uint32_t)desc.alignment, true);
+
 	wilog("SuballocateGPUBuffer created buffer block with size: %s, with page size: %s, page count: %d", wi::helper::GetMemorySizeText(block.allocator.total_size_in_bytes()).c_str(), wi::helper::GetMemorySizeText(block.allocator.page_size).c_str(), (int)block.allocator.page_count);
 
 	allocation.allocation = block.allocator.allocate(size);
 	if (allocation.allocation.IsValid())
 	{
+
 		allocation.alias = block.buffer;
 		//wilog("SuballocateGPUBuffer allocated size: %s, pages: %d, free space remaining: %s", wi::helper::GetMemorySizeText(size).c_str(), block.allocator.page_count_from_bytes(size), wi::helper::GetMemorySizeText(allocation.allocation.allocator->allocator.storageReport().totalFreeSpace * block.allocator.page_size).c_str());
 	}
+
 	return allocation;
 }
 void UpdateGPUSuballocator()
