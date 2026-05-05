@@ -6451,13 +6451,12 @@ std::mutex queue_locker;
 #else
 		commandlist.GetGraphicsCommandListLatest()->EndRenderPass();
 #endif // DISABLE_RENDERPASS
-
 		if (commandlist.shading_rate_image != nullptr)
 		{
 			commandlist.GetGraphicsCommandListLatest()->RSSetShadingRateImage(nullptr);
 			commandlist.shading_rate_image = nullptr;
 		}
-
+		
 		if (!commandlist.renderpass_barriers_end.empty())
 		{
 			commandlist.GetGraphicsCommandList()->ResourceBarrier(
@@ -6465,7 +6464,6 @@ std::mutex queue_locker;
 				commandlist.renderpass_barriers_end.data()
 			);
 		}
-
 		commandlist.renderpass_info = {};
 	}
 	void GraphicsDevice_DX12::BindScissorRects(uint32_t numRects, const Rect* rects, CommandList cmd)

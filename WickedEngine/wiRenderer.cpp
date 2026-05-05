@@ -3763,6 +3763,21 @@ void UpdateVisibility(Visibility& vis)
 			}
 
 			const AABB& aabb = vis.scene->aabb_objects[args.jobIndex];
+			if (args.jobIndex == 0) {
+        std::cout << "[WI] Obj0 aabb.layerMask=" << aabb.layerMask
+                  << " vis.layerMask=" << vis.layerMask
+                  << " layerPass=" << (bool)(aabb.layerMask & vis.layerMask)
+                  << " frustumPass=" << (bool)vis.frustum.CheckBoxFast(aabb)
+                  << " aabb_min=(" << aabb._min.x << "," << aabb._min.y << "," << aabb._min.z << ")"
+                  << " aabb_max=(" << aabb._max.x << "," << aabb._max.y << "," << aabb._max.z << ")\n" << std::flush;
+    	}
+			for (int p = 0; p < 6; ++p) {
+        std::cout << "[WI] Frustum plane[" << p << "]: ("
+                  << vis.frustum.planes[p].x << ", "
+                  << vis.frustum.planes[p].y << ", "
+                  << vis.frustum.planes[p].z << ", "
+                  << vis.frustum.planes[p].w << ")\n" << std::flush;
+			}
 
 			if ((aabb.layerMask & vis.layerMask) && vis.frustum.CheckBoxFast(aabb))
 			{

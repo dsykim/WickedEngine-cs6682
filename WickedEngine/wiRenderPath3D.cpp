@@ -4,6 +4,7 @@
 #include "wiHelper.h"
 #include "wiTextureHelper.h"
 #include "wiProfiler.h"
+#include <iostream>
 
 using namespace wi::graphics;
 using namespace wi::enums;
@@ -376,7 +377,21 @@ namespace wi
 		{
 			visibility_main.flags &= ~wi::renderer::Visibility::ALLOW_OCCLUSION_CULLING;
 		}
+		// Before wi::renderer::UpdateVisibility(visibility_main);
+		for (size_t i = 0; i < scene->aabb_objects.size(); ++i) {
+				auto& aabb = scene->aabb_objects[i];
+				std::cout << "[WI] Object " << i << " AABB min=("
+									<< aabb._min.x << "," << aabb._min.y << "," << aabb._min.z
+									<< ") max=(" << aabb._max.x << "," << aabb._max.y << "," << aabb._max.z
+									<< ") renderable=" << scene->objects[i].IsRenderable() << "\n" << std::flush;
+		}
+		std::cout << "[WI] layerMask=" << visibility_main.layerMask << "\n" << std::flush;
 		wi::renderer::UpdateVisibility(visibility_main);
+		// Find the UpdateVisibility call, add after it:
+		std::cout << "[WI] Camera frustum planes valid: " 
+          << (visibility_main.camera != nullptr) << "\n" << std::flush;
+		std::cout << "[WI] Visibility: objects=" << visibility_main.scene->objects.GetCount()
+          << " visibleObjects=" << visibility_main.visibleObjects.size() << "\n" << std::flush;
 
 		if (visibility_main.planar_reflection_visible)
 		{
@@ -820,6 +835,8 @@ namespace wi
 
 	void RenderPath3D::Render() const
 	{
+		std::cout << "[WI] RenderPath3D::Render() entered, scene=" 
+              << scene << " camera=" << camera << "\n" << std::flush;
 		if (!prerender_happened)
 		{
 			// Since 0.71.694: PreRender must be called before Render() because it sets up rendering resources!
@@ -980,6 +997,8 @@ namespace wi
 			vp.height = (float)depthBuffer_Main.GetDesc().height;
 
 			// Foreground:
+			std::cout << "[WI] About to DrawScene PREPASS, visibleObjects=" 
+          << visibility_main.visibleObjects.size() << "\n" << std::flush;
 			vp.min_depth = 1 - foreground_depth_range;
 			vp.max_depth = 1;
 			device->BindViewports(1, &vp, cmd);
@@ -1752,6 +1771,8 @@ namespace wi
 		wi::jobsystem::Execute(ctx, [this, cmd](wi::jobsystem::JobArgs args) {
 			wi::renderer::TextureStreamingReadbackCopy(*scene, cmd);
 		});
+		const wi::graphics::Texture* lastRT = GetLastPostprocessRT();
+		std::cout << "[WI] After Wait: GetLastPostprocessRT=" << lastRT << " IsValid=" << (lastRT ? lastRT->IsValid() : false) << "\n" << std::flush;
 
 		RenderPath2D::Render();
 
