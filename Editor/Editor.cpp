@@ -6,12 +6,13 @@
 #include "Translator.h"
 #include "DummyVisualizer.h"
 
+static const std::string path = "C:/VSCode/CS6682/cs6682-final-project";
+
 // some application parameters can be overwritten in the executable by finding the 256 byte long pattern in the first member:
 ApplicationExeCustomization exe_customization = {
 	"Wicked Editor                                                                                                          ",
 	wi::Color(130, 210, 220, 255),
-	wi::Color(17, 30, 43, 255)
-};
+	wi::Color(17, 30, 43, 255)};
 
 using namespace wi::graphics;
 using namespace wi::primitive;
@@ -122,47 +123,47 @@ struct HotkeyInfo
 	bool shift = false;
 };
 HotkeyInfo hotkeyActions[size_t(EditorActions::COUNT)] = {
-	{wi::input::BUTTON('W'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//MOVE_CAMERA_FORWARD,
-	{wi::input::BUTTON('S'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//MOVE_CAMERA_BACKWARD,
-	{wi::input::BUTTON('A'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//MOVE_CAMERA_LEFT,
-	{wi::input::BUTTON('D'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//MOVE_CAMERA_RIGHT,
-	{wi::input::BUTTON('E'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//MOVE_CAMERA_UP,
-	{wi::input::BUTTON('Q'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//MOVE_CAMERA_DOWN,
-	{wi::input::BUTTON('D'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//DUPLICATE_ENTITY,
-	{wi::input::BUTTON('A'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//SELECT_ALL_ENTITIES,
-	{wi::input::BUTTON::KEYBOARD_BUTTON_ESCAPE,	/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//DESELECT_ALL_ENTITIES,
-	{wi::input::BUTTON('F'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//FOCUS_ON_SELECTION,
-	{wi::input::BUTTON::KEYBOARD_BUTTON_F2,		/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//RENAME_SELECTED,
-	{wi::input::BUTTON('Z'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//UNDO_ACTION,
-	{wi::input::BUTTON('Y'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//REDO_ACTION,
-	{wi::input::BUTTON('C'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//COPY_ACTION,
-	{wi::input::BUTTON('X'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//CUT_ACTION,
-	{wi::input::BUTTON('V'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//PASTE_ACTION,
-	{wi::input::BUTTON::KEYBOARD_BUTTON_DELETE,	/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//DELETE_ACTION,
-	{wi::input::BUTTON('1'),					/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//MOVE_TOGGLE_ACTION,
-	{wi::input::BUTTON('2'),					/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//ROTATE_TOGGLE_ACTION,
-	{wi::input::BUTTON('3'),					/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//SCALE_TOGGLE_ACTION,
-	{wi::input::BUTTON('4'),					/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//LOCAL_GLOBAL_TOGGLE_ACTION,
-	{wi::input::BUTTON::KEYBOARD_BUTTON_F3,		/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//SCREENSHOT,
-	{wi::input::BUTTON::KEYBOARD_BUTTON_F4,		/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//SCREENSHOT_ALPHA,
-	{wi::input::BUTTON('I'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//INSPECTOR_MODE,
-	{wi::input::BUTTON::MOUSE_BUTTON_LEFT,		/*press=*/ true,		/*control=*/ true,		/*shift=*/ true},	//PLACE_INSTANCES,
-	{wi::input::BUTTON('S'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ true},	//SAVE_SCENE_AS,
-	{wi::input::BUTTON('S'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//SAVE_SCENE,
-	{wi::input::BUTTON('T'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//ENABLE_TRANSFORM_TOOL,
-	{wi::input::BUTTON('W'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//WIREFRAME_MODE,
-	{wi::input::BUTTON('C'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//DEPTH_OF_FIELD_REFOCUS_TO_POINT,
-	{wi::input::BUTTON('G'),					/*press=*/ false,		/*control=*/ true,		/*shift=*/ false},	//COLOR_GRADING_REFERENCE,
-	{wi::input::BUTTON('P'),					/*press=*/ false,		/*control=*/ false,		/*shift=*/ false},	//RAGDOLL_AND_PHYSICS_IMPULSE_TESTER,
-	{wi::input::BUTTON('O'),					/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//ORTHO_CAMERA,
-	{wi::input::BUTTON('H'),					/*press=*/ true,		/*control=*/ false,		/*shift=*/ false},	//HIERARCHY_SELECT,
-	{wi::input::BUTTON('E'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//ADD_TO_SPLINE,
-	{wi::input::BUTTON('R'),					/*press=*/ true,		/*control=*/ true,		/*shift=*/ false},	//RELOAD_TERRAIN_PROPS,
+	{wi::input::BUTTON('W'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // MOVE_CAMERA_FORWARD,
+	{wi::input::BUTTON('S'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // MOVE_CAMERA_BACKWARD,
+	{wi::input::BUTTON('A'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // MOVE_CAMERA_LEFT,
+	{wi::input::BUTTON('D'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // MOVE_CAMERA_RIGHT,
+	{wi::input::BUTTON('E'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // MOVE_CAMERA_UP,
+	{wi::input::BUTTON('Q'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // MOVE_CAMERA_DOWN,
+	{wi::input::BUTTON('D'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // DUPLICATE_ENTITY,
+	{wi::input::BUTTON('A'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // SELECT_ALL_ENTITIES,
+	{wi::input::BUTTON::KEYBOARD_BUTTON_ESCAPE, /*press=*/true, /*control=*/false, /*shift=*/false}, // DESELECT_ALL_ENTITIES,
+	{wi::input::BUTTON('F'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // FOCUS_ON_SELECTION,
+	{wi::input::BUTTON::KEYBOARD_BUTTON_F2, /*press=*/true, /*control=*/false, /*shift=*/false},	 // RENAME_SELECTED,
+	{wi::input::BUTTON('Z'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // UNDO_ACTION,
+	{wi::input::BUTTON('Y'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // REDO_ACTION,
+	{wi::input::BUTTON('C'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // COPY_ACTION,
+	{wi::input::BUTTON('X'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // CUT_ACTION,
+	{wi::input::BUTTON('V'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // PASTE_ACTION,
+	{wi::input::BUTTON::KEYBOARD_BUTTON_DELETE, /*press=*/true, /*control=*/false, /*shift=*/false}, // DELETE_ACTION,
+	{wi::input::BUTTON('1'), /*press=*/true, /*control=*/false, /*shift=*/false},					 // MOVE_TOGGLE_ACTION,
+	{wi::input::BUTTON('2'), /*press=*/true, /*control=*/false, /*shift=*/false},					 // ROTATE_TOGGLE_ACTION,
+	{wi::input::BUTTON('3'), /*press=*/true, /*control=*/false, /*shift=*/false},					 // SCALE_TOGGLE_ACTION,
+	{wi::input::BUTTON('4'), /*press=*/true, /*control=*/false, /*shift=*/false},					 // LOCAL_GLOBAL_TOGGLE_ACTION,
+	{wi::input::BUTTON::KEYBOARD_BUTTON_F3, /*press=*/true, /*control=*/false, /*shift=*/false},	 // SCREENSHOT,
+	{wi::input::BUTTON::KEYBOARD_BUTTON_F4, /*press=*/true, /*control=*/false, /*shift=*/false},	 // SCREENSHOT_ALPHA,
+	{wi::input::BUTTON('I'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // INSPECTOR_MODE,
+	{wi::input::BUTTON::MOUSE_BUTTON_LEFT, /*press=*/true, /*control=*/true, /*shift=*/true},		 // PLACE_INSTANCES,
+	{wi::input::BUTTON('S'), /*press=*/true, /*control=*/true, /*shift=*/true},						 // SAVE_SCENE_AS,
+	{wi::input::BUTTON('S'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // SAVE_SCENE,
+	{wi::input::BUTTON('T'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // ENABLE_TRANSFORM_TOOL,
+	{wi::input::BUTTON('W'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // WIREFRAME_MODE,
+	{wi::input::BUTTON('C'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // DEPTH_OF_FIELD_REFOCUS_TO_POINT,
+	{wi::input::BUTTON('G'), /*press=*/false, /*control=*/true, /*shift=*/false},					 // COLOR_GRADING_REFERENCE,
+	{wi::input::BUTTON('P'), /*press=*/false, /*control=*/false, /*shift=*/false},					 // RAGDOLL_AND_PHYSICS_IMPULSE_TESTER,
+	{wi::input::BUTTON('O'), /*press=*/true, /*control=*/false, /*shift=*/false},					 // ORTHO_CAMERA,
+	{wi::input::BUTTON('H'), /*press=*/true, /*control=*/false, /*shift=*/false},					 // HIERARCHY_SELECT,
+	{wi::input::BUTTON('E'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // ADD_TO_SPLINE,
+	{wi::input::BUTTON('R'), /*press=*/true, /*control=*/true, /*shift=*/false},					 // RELOAD_TERRAIN_PROPS,
 };
 static_assert(arraysize(hotkeyActions) == size_t(EditorActions::COUNT));
 bool CheckInput(EditorActions action)
 {
-	const HotkeyInfo& hotkey = hotkeyActions[size_t(action)];
+	const HotkeyInfo &hotkey = hotkeyActions[size_t(action)];
 	bool ret = false;
 	if (hotkey.press)
 	{
@@ -184,7 +185,7 @@ bool CheckInput(EditorActions action)
 }
 std::string GetInputString(EditorActions action)
 {
-	const HotkeyInfo& hotkey = hotkeyActions[size_t(action)];
+	const HotkeyInfo &hotkey = hotkeyActions[size_t(action)];
 	std::string ret = wi::input::ButtonToString(hotkey.button).text;
 	if (hotkey.shift)
 	{
@@ -196,7 +197,7 @@ std::string GetInputString(EditorActions action)
 	}
 	return ret;
 }
-void HotkeyRemap(Editor* main)
+void HotkeyRemap(Editor *main)
 {
 	static const wi::unordered_map<std::string, EditorActions> actionMap = {
 		{"MOVE_CAMERA_FORWARD", EditorActions::MOVE_CAMERA_FORWARD},
@@ -261,7 +262,7 @@ void HotkeyRemap(Editor* main)
 	};
 
 	wi::config::Section hotkeyssection = main->config.GetSection("hotkeys");
-	for (auto& x : hotkeyssection)
+	for (auto &x : hotkeyssection)
 	{
 		auto itAction = actionMap.find(wi::helper::toUpper(x.first));
 		if (itAction == actionMap.end())
@@ -304,7 +305,7 @@ void HotkeyRemap(Editor* main)
 		// Remap hotkey if button is successfully found:
 		if (button != wi::input::BUTTON_NONE)
 		{
-			hotkeyActions[size_t(action)] = HotkeyInfo{ button, hotkeyActions[size_t(action)].press, hotkeyString.find("CTRL") != std::string::npos, hotkeyString.find("SHIFT") != std::string::npos };
+			hotkeyActions[size_t(action)] = HotkeyInfo{button, hotkeyActions[size_t(action)].press, hotkeyString.find("CTRL") != std::string::npos, hotkeyString.find("SHIFT") != std::string::npos};
 		}
 	}
 }
@@ -329,12 +330,12 @@ void Editor::Initialize()
 	infoDisplay.active = true;
 	infoDisplay.watermark = false; // can be toggled instead on gui
 	infoDisplay.pipeline_creation = true;
-	//infoDisplay.fpsinfo = true;
-	//infoDisplay.resolution = true;
-	//infoDisplay.logical_size = true;
-	//infoDisplay.colorspace = true;
-	//infoDisplay.heap_allocation_counter = true;
-	//infoDisplay.vram_usage = true;
+	// infoDisplay.fpsinfo = true;
+	// infoDisplay.resolution = true;
+	// infoDisplay.logical_size = true;
+	// infoDisplay.colorspace = true;
+	// infoDisplay.heap_allocation_counter = true;
+	// infoDisplay.vram_usage = true;
 
 	// Font icon is from #include "FontAwesomeV6.h"
 	//	We will not directly use this font style, but let the font renderer fall back on it
@@ -356,24 +357,25 @@ void Editor::Initialize()
 		wi::lua::EnableEditorFunctionality(this, &renderComponent);
 
 		auto ext_video = wi::resourcemanager::GetSupportedVideoExtensions();
-		for (auto& x : ext_video)
+		for (auto &x : ext_video)
 		{
 			filetypes[x] = FileType::VIDEO;
 		}
 		auto ext_sound = wi::resourcemanager::GetSupportedSoundExtensions();
-		for (auto& x : ext_sound)
+		for (auto &x : ext_sound)
 		{
 			filetypes[x] = FileType::SOUND;
 		}
 		auto ext_image = wi::resourcemanager::GetSupportedImageExtensions();
-		for (auto& x : ext_image)
+		for (auto &x : ext_image)
 		{
 			filetypes[x] = FileType::IMAGE;
 		}
 	}
 }
 
-bool Editor::KeepRunning() {
+bool Editor::KeepRunning()
+{
 	return !exit_requested || renderComponent.save_in_progress;
 }
 
@@ -450,7 +452,8 @@ void Editor::HotReload()
 
 	if (wi::shadercompiler::GetRegisteredShaderCount() > 0 && !wi::renderer::IsPipelineCreationActive())
 	{
-		wi::jobsystem::Execute(hotreload_ctx, [](wi::jobsystem::JobArgs args) {
+		wi::jobsystem::Execute(hotreload_ctx, [](wi::jobsystem::JobArgs args)
+							   {
 			wi::backlog::post("[Shader check] Started checking " + std::to_string(wi::shadercompiler::GetRegisteredShaderCount()) + " registered shaders for changes...");
 			if (wi::shadercompiler::CheckRegisteredShadersOutdated())
 			{
@@ -462,11 +465,11 @@ void Editor::HotReload()
 			else
 			{
 				wi::backlog::post("[Shader check] All up to date");
-			}
-		});
+			} });
 	}
 
-	wi::jobsystem::Execute(hotreload_ctx, [](wi::jobsystem::JobArgs args) {
+	wi::jobsystem::Execute(hotreload_ctx, [](wi::jobsystem::JobArgs args)
+						   {
 		wi::backlog::post("[Resource check] Started checking resource manager for changes...");
 		if (wi::resourcemanager::CheckResourcesOutdated())
 		{
@@ -478,8 +481,7 @@ void Editor::HotReload()
 		else
 		{
 			wi::backlog::post("[Resource check] All up to date");
-		}
-	});
+		} });
 
 	renderComponent.ReloadLanguage();
 }
@@ -491,8 +493,8 @@ void EditorComponent::ResizeBuffers()
 	init(main->canvas);
 	RenderPath2D::ResizeBuffers();
 
-	renderPath->width = 0; // force resize buffers
-	renderPath->height = 0;// force resize buffers
+	renderPath->width = 0;	// force resize buffers
+	renderPath->height = 0; // force resize buffers
 	ResizeViewport3D();
 
 	TextureDesc desc;
@@ -529,11 +531,10 @@ void EditorComponent::ResizeLayout()
 
 	themeEditorWnd.SetSize(XMFLOAT2(740, std::min(780.0f, screenH * 0.8f)));
 	themeEditorWnd.SetPos(XMFLOAT2(screenW / 2.0f - themeEditorWnd.scale.x / 2.0f, screenH / 2.0f - themeEditorWnd.scale.y / 2.0f));
-
 }
 void EditorComponent::Load()
 {
-	//Load hotkeys here
+	// Load hotkeys here
 	HotkeyRemap(main);
 
 	wi::gui::CheckBox::SetCheckTextGlobal(ICON_CHECK);
@@ -565,46 +566,47 @@ void EditorComponent::Load()
 	topmenuWnd.scrollbar_vertical.Detach();
 
 	generalButton.Create(ICON_GENERALOPTIONS);
-	generalButton.OnClick([this](wi::gui::EventArgs args) {
+	generalButton.OnClick([this](wi::gui::EventArgs args)
+						  {
 		generalWnd.SetVisible(!generalWnd.IsVisible());
 		graphicsWnd.SetVisible(false);
 		cameraWnd.SetVisible(false);
 		materialPickerWnd.SetVisible(false);
-		paintToolWnd.SetVisible(false);
-	});
+		paintToolWnd.SetVisible(false); });
 	generalButton.SetShadowRadius(0);
 	generalButton.SetTooltip("General options");
 	generalButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
 	GetGUI().AddWidget(&generalButton);
 
 	graphicsButton.Create(ICON_GRAPHICSOPTIONS);
-	graphicsButton.OnClick([this](wi::gui::EventArgs args) {
+	graphicsButton.OnClick([this](wi::gui::EventArgs args)
+						   {
 		generalWnd.SetVisible(false);
 		graphicsWnd.SetVisible(!graphicsWnd.IsVisible());
 		cameraWnd.SetVisible(false);
 		materialPickerWnd.SetVisible(false);
-		paintToolWnd.SetVisible(false);
-	});
+		paintToolWnd.SetVisible(false); });
 	graphicsButton.SetShadowRadius(0);
 	graphicsButton.SetTooltip("Graphics options");
 	graphicsButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
 	GetGUI().AddWidget(&graphicsButton);
 
 	cameraButton.Create(ICON_CAMERAOPTIONS);
-	cameraButton.OnClick([this](wi::gui::EventArgs args) {
+	cameraButton.OnClick([this](wi::gui::EventArgs args)
+						 {
 		generalWnd.SetVisible(false);
 		graphicsWnd.SetVisible(false);
 		cameraWnd.SetVisible(!cameraWnd.IsVisible());
 		materialPickerWnd.SetVisible(false);
-		paintToolWnd.SetVisible(false);
-	});
+		paintToolWnd.SetVisible(false); });
 	cameraButton.SetShadowRadius(0);
 	cameraButton.SetTooltip("Camera options");
 	cameraButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
 	GetGUI().AddWidget(&cameraButton);
 
 	materialsButton.Create(ICON_MATERIALBROWSER);
-	materialsButton.OnClick([this](wi::gui::EventArgs args) {
+	materialsButton.OnClick([this](wi::gui::EventArgs args)
+							{
 		generalWnd.SetVisible(false);
 		graphicsWnd.SetVisible(false);
 		cameraWnd.SetVisible(false);
@@ -613,21 +615,20 @@ void EditorComponent::Load()
 		if (materialPickerWnd.IsVisible())
 		{
 			materialPickerWnd.RecreateButtons();
-		}
-	});
+		} });
 	materialsButton.SetShadowRadius(0);
 	materialsButton.SetTooltip("Material browser");
 	materialsButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
 	GetGUI().AddWidget(&materialsButton);
 
 	paintToolButton.Create(ICON_PAINTTOOL);
-	paintToolButton.OnClick([this](wi::gui::EventArgs args) {
+	paintToolButton.OnClick([this](wi::gui::EventArgs args)
+							{
 		generalWnd.SetVisible(false);
 		graphicsWnd.SetVisible(false);
 		cameraWnd.SetVisible(false);
 		materialPickerWnd.SetVisible(false);
-		paintToolWnd.SetVisible(!paintToolWnd.IsVisible());
-	});
+		paintToolWnd.SetVisible(!paintToolWnd.IsVisible()); });
 	paintToolButton.SetShadowRadius(0);
 	paintToolButton.SetTooltip("Paint tool");
 	paintToolButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -651,9 +652,8 @@ void EditorComponent::Load()
 	newSceneButton.Create("+");
 	newSceneButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
 	newSceneButton.SetTooltip("New scene");
-	newSceneButton.OnClick([this](wi::gui::EventArgs args) {
-		NewScene();
-		});
+	newSceneButton.OnClick([this](wi::gui::EventArgs args)
+						   { NewScene(); });
 	topmenuWnd.AddWidget(&newSceneButton);
 
 	enum NEW_THING
@@ -723,7 +723,8 @@ void EditorComponent::Load()
 	newEntityCombo.AddItem("Metadata " ICON_METADATA, NEW_METADATA);
 	newEntityCombo.AddItem("Constraint " ICON_CONSTRAINT, NEW_CONSTRAINT);
 	newEntityCombo.AddItem("Spline " ICON_SPLINE, NEW_SPLINE);
-	newEntityCombo.OnSelect([this](wi::gui::EventArgs args) {
+	newEntityCombo.OnSelect([this](wi::gui::EventArgs args)
+							{
 		newEntityCombo.SetSelectedWithoutCallback(-1);
 		const EditorComponent::EditorScene& editorscene = GetCurrentEditorScene();
 		const CameraComponent& camera = editorscene.camera;
@@ -977,8 +978,7 @@ void EditorComponent::Load()
 			RecordSelection(archive);
 			RecordEntity(archive, pick.entity);
 		}
-		componentsWnd.RefreshEntityTree();
-	});
+		componentsWnd.RefreshEntityTree(); });
 	newEntityCombo.SetEnabled(true);
 	newEntityCombo.SetTooltip("Create a new entity");
 	GetGUI().AddWidget(&newEntityCombo);
@@ -990,31 +990,31 @@ void EditorComponent::Load()
 		scaleButton.SetShadowRadius(2);
 		scaleButton.SetTooltip("Scale\nHotkey: 3");
 		scaleButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
-		scaleButton.OnClick([this](wi::gui::EventArgs args) {
+		scaleButton.OnClick([this](wi::gui::EventArgs args)
+							{
 			translator.isScalator = true;
 			translator.isTranslator = false;
-			translator.isRotator = false;
-		});
+			translator.isRotator = false; });
 		GetGUI().AddWidget(&scaleButton);
 
 		rotateButton.SetShadowRadius(2);
 		rotateButton.SetTooltip("Rotate\nHotkey: 2");
 		rotateButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
-		rotateButton.OnClick([this](wi::gui::EventArgs args) {
+		rotateButton.OnClick([this](wi::gui::EventArgs args)
+							 {
 			translator.isRotator = true;
 			translator.isScalator = false;
-			translator.isTranslator = false;
-			});
+			translator.isTranslator = false; });
 		GetGUI().AddWidget(&rotateButton);
 
 		translateButton.SetShadowRadius(2);
 		translateButton.SetTooltip("Translate/Move (Ctrl + T)\nHotkey: 1");
 		translateButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
-		translateButton.OnClick([this](wi::gui::EventArgs args) {
+		translateButton.OnClick([this](wi::gui::EventArgs args)
+								{
 			translator.isTranslator = true;
 			translator.isScalator = false;
-			translator.isRotator = false;
-			});
+			translator.isRotator = false; });
 		GetGUI().AddWidget(&translateButton);
 	}
 
@@ -1022,10 +1022,10 @@ void EditorComponent::Load()
 	localGlobalButton.SetShadowRadius(2);
 	localGlobalButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
 	UpdateLocalGlobalButton();
-	localGlobalButton.OnClick([this](wi::gui::EventArgs args) {
+	localGlobalButton.OnClick([this](wi::gui::EventArgs args)
+							  {
 		translator.isLocalSpace = !translator.isLocalSpace;
-		UpdateLocalGlobalButton();
-	});
+		UpdateLocalGlobalButton(); });
 	GetGUI().AddWidget(&localGlobalButton);
 
 	physicsButton.Create(ICON_RIGIDBODY);
@@ -1035,7 +1035,8 @@ void EditorComponent::Load()
 	{
 		wi::physics::SetSimulationEnabled(main->config.GetSection("options").GetBool("physics"));
 	}
-	physicsButton.OnClick([this](wi::gui::EventArgs args) {
+	physicsButton.OnClick([this](wi::gui::EventArgs args)
+						  {
 		if (wi::input::Down(wi::input::KEYBOARD_BUTTON_LCONTROL))
 		{
 			wi::physics::ResetPhysicsObjects(GetCurrentScene());
@@ -1045,15 +1046,15 @@ void EditorComponent::Load()
 			wi::physics::SetSimulationEnabled(!wi::physics::IsSimulationEnabled());
 			main->config.GetSection("options").Set("physics", wi::physics::IsSimulationEnabled());
 			main->config.Commit();
-		}
-	});
+		} });
 	GetGUI().AddWidget(&physicsButton);
 
 	dummyButton.Create(ICON_DUMMY);
 	dummyButton.SetShadowRadius(2);
 	dummyButton.SetTooltip("Toggle reference dummy visualizer\n - Use the reference dummy to get an idea about object sizes compared to a human character size.\n - Position the dummy by clicking on something with the middle mouse button while the dummy is active.\n - Pressing this button while Ctrl key is held down will reset dummy position to the origin.\n - Pressing this button while the Shift key is held down will switch between male and female dummies.");
 	dummyButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
-	dummyButton.OnClick([this](wi::gui::EventArgs args) {
+	dummyButton.OnClick([this](wi::gui::EventArgs args)
+						{
 		if (wi::input::Down(wi::input::KEYBOARD_BUTTON_LCONTROL) || wi::input::Down(wi::input::KEYBOARD_BUTTON_RCONTROL))
 		{
 			dummy_pos = XMFLOAT3(0, 0, 0);
@@ -1065,17 +1066,15 @@ void EditorComponent::Load()
 		else
 		{
 			dummy_enabled = !dummy_enabled;
-		}
-	});
+		} });
 	GetGUI().AddWidget(&dummyButton);
 
 	navtestButton.Create(ICON_NAVIGATION);
 	navtestButton.SetShadowRadius(2);
 	navtestButton.SetTooltip("Toggle navigation testing. When enabled, you can visualize path finding results.\nYou can put down START and GOAL waypoints inside voxel grids to test path finding.\nControls:\n----------\nF5 + middle click: put START to surface\nF6 + middle click: put GOAL to surface\nF7 + middle click: put START to air\nF8 + middle click: put GOAL to air");
 	navtestButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
-	navtestButton.OnClick([this](wi::gui::EventArgs args) {
-		navtest_enabled = !navtest_enabled;
-	});
+	navtestButton.OnClick([this](wi::gui::EventArgs args)
+						  { navtest_enabled = !navtest_enabled; });
 	GetGUI().AddWidget(&navtestButton);
 
 	playButton.Create(ICON_PLAY);
@@ -1083,7 +1082,8 @@ void EditorComponent::Load()
 	playButton.SetShadowRadius(2);
 	playButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
 	playButton.SetTooltip("Execute the last used (standalone) script.\nTo use a new script, use the Open button.");
-	playButton.OnClick([this](wi::gui::EventArgs args) {
+	playButton.OnClick([this](wi::gui::EventArgs args)
+					   {
 		if (last_script_path.empty() || !wi::helper::FileExists(last_script_path))
 		{
 			contentBrowserWnd.RefreshContent();
@@ -1095,8 +1095,7 @@ void EditorComponent::Load()
 			wi::eventhandler::Subscribe_Once(wi::eventhandler::EVENT_THREAD_SAFE_POINT, [=](uint64_t userdata) {
 				wi::lua::RunFile(last_script_path);
 			});
-		}
-	});
+		} });
 	topmenuWnd.AddWidget(&playButton);
 
 	if (main->config.Has("last_script_path"))
@@ -1105,30 +1104,24 @@ void EditorComponent::Load()
 	}
 	playButton.SetScriptTip("dofile(\"" + last_script_path + "\")");
 
-
 	stopButton.Create(ICON_STOP);
 	stopButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
 	stopButton.font.params.shadowColor = wi::Color::Transparent();
 	stopButton.SetShadowRadius(2);
 	stopButton.SetTooltip("Stops every script background processes that are still running.");
 	stopButton.SetScriptTip("killProcesses()");
-	stopButton.OnClick([](wi::gui::EventArgs args) {
-		wi::lua::KillProcesses();
-	});
+	stopButton.OnClick([](wi::gui::EventArgs args)
+					   { wi::lua::KillProcesses(); });
 	topmenuWnd.AddWidget(&stopButton);
-
 
 	projectCreatorButton.Create(ICON_PROJECT_CREATE);
 	projectCreatorButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
 	projectCreatorButton.font.params.shadowColor = wi::Color::Transparent();
 	projectCreatorButton.SetShadowRadius(2);
 	projectCreatorButton.SetTooltip("Create a new project.");
-	projectCreatorButton.OnClick([this](wi::gui::EventArgs args) {
-		projectCreatorWnd.SetVisible(!projectCreatorWnd.IsVisible());
-	});
+	projectCreatorButton.OnClick([this](wi::gui::EventArgs args)
+								 { projectCreatorWnd.SetVisible(!projectCreatorWnd.IsVisible()); });
 	topmenuWnd.AddWidget(&projectCreatorButton);
-
-
 
 	saveButton.Create("Save");
 	saveButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -1137,11 +1130,9 @@ void EditorComponent::Load()
 	saveButton.SetTooltip("Save the current scene to a new file (Ctrl + Shift + S)\nBy default, the scene will be saved into .wiscene, but you can specify .gltf or .glb extensions to export into GLTF.\nYou can also use Ctrl + S to quicksave, without browsing.");
 	saveButton.SetColor(wi::Color(50, 180, 100, 180), wi::gui::WIDGETSTATE::IDLE);
 	saveButton.SetColor(wi::Color(50, 220, 140, 255), wi::gui::WIDGETSTATE::FOCUS);
-	saveButton.OnClick([this](wi::gui::EventArgs args) {
-		SaveAs();
-		});
+	saveButton.OnClick([this](wi::gui::EventArgs args)
+					   { SaveAs(); });
 	topmenuWnd.AddWidget(&saveButton);
-
 
 	openButton.Create("Open");
 	openButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -1153,7 +1144,8 @@ void EditorComponent::Load()
 #endif // PLATFORM_WINDOWS_DESKTOP
 	openButton.SetColor(wi::Color(50, 100, 255, 180), wi::gui::WIDGETSTATE::IDLE);
 	openButton.SetColor(wi::Color(120, 160, 255, 255), wi::gui::WIDGETSTATE::FOCUS);
-	openButton.OnClick([this](wi::gui::EventArgs args) {
+	openButton.OnClick([this](wi::gui::EventArgs args)
+					   {
 		const uint64_t target_scene_id = GetCurrentEditorScene().id;
 		wi::helper::FileDialogParams params;
 		params.type = wi::helper::FileDialogParams::OPEN;
@@ -1201,10 +1193,8 @@ void EditorComponent::Load()
 				}
 				Open(fileName);
 				});
-			});
-		});
+			}); });
 	topmenuWnd.AddWidget(&openButton);
-
 
 	contentBrowserButton.Create("Content Browser");
 	contentBrowserButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -1213,15 +1203,14 @@ void EditorComponent::Load()
 	contentBrowserButton.SetTooltip("Browse content.");
 	contentBrowserButton.SetColor(wi::Color(50, 100, 255, 180), wi::gui::WIDGETSTATE::IDLE);
 	contentBrowserButton.SetColor(wi::Color(120, 160, 255, 255), wi::gui::WIDGETSTATE::FOCUS);
-	contentBrowserButton.OnClick([this](wi::gui::EventArgs args) {
+	contentBrowserButton.OnClick([this](wi::gui::EventArgs args)
+								 {
 		contentBrowserWnd.SetVisible(!contentBrowserWnd.IsVisible());
 		if (contentBrowserWnd.IsVisible())
 		{
 			contentBrowserWnd.RefreshContent();
-		}
-	});
+		} });
 	topmenuWnd.AddWidget(&contentBrowserButton);
-
 
 	logButton.Create("Backlog");
 	logButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -1230,11 +1219,9 @@ void EditorComponent::Load()
 	logButton.SetTooltip("Open the backlog (toggle with HOME button)");
 	logButton.SetColor(wi::Color(50, 160, 200, 180), wi::gui::WIDGETSTATE::IDLE);
 	logButton.SetColor(wi::Color(120, 200, 200, 255), wi::gui::WIDGETSTATE::FOCUS);
-	logButton.OnClick([](wi::gui::EventArgs args) {
-		wi::backlog::Toggle();
-		});
+	logButton.OnClick([](wi::gui::EventArgs args)
+					  { wi::backlog::Toggle(); });
 	topmenuWnd.AddWidget(&logButton);
-
 
 	profilerButton.Create("Profiler");
 	profilerButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -1243,12 +1230,11 @@ void EditorComponent::Load()
 	profilerButton.SetTooltip("View the profiler frame timings");
 	profilerButton.SetColor(wi::Color(50, 160, 200, 180), wi::gui::WIDGETSTATE::IDLE);
 	profilerButton.SetColor(wi::Color(120, 200, 200, 255), wi::gui::WIDGETSTATE::FOCUS);
-	profilerButton.OnClick([this](wi::gui::EventArgs args) {
+	profilerButton.OnClick([this](wi::gui::EventArgs args)
+						   {
 		profilerWnd.SetVisible(!wi::profiler::IsEnabled());
-		wi::profiler::SetEnabled(!wi::profiler::IsEnabled());
-	});
+		wi::profiler::SetEnabled(!wi::profiler::IsEnabled()); });
 	topmenuWnd.AddWidget(&profilerButton);
-
 
 	cinemaButton.Create(ICON_CINEMA_MODE);
 	cinemaButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -1257,7 +1243,8 @@ void EditorComponent::Load()
 	cinemaButton.SetTooltip("Enter cinema mode (all HUD disabled). Press ESC to return to normal.");
 	cinemaButton.SetColor(wi::Color(50, 160, 200, 180), wi::gui::WIDGETSTATE::IDLE);
 	cinemaButton.SetColor(wi::Color(120, 200, 200, 255), wi::gui::WIDGETSTATE::FOCUS);
-	cinemaButton.OnClick([this](wi::gui::EventArgs args) {
+	cinemaButton.OnClick([this](wi::gui::EventArgs args)
+						 {
 		cinema_mode_saved_debugEnvProbes = wi::renderer::GetToDrawDebugEnvProbes();
 		cinema_mode_saved_debugCameras = wi::renderer::GetToDrawDebugCameras();
 		cinema_mode_saved_debugColliders = wi::renderer::GetToDrawDebugColliders();
@@ -1284,10 +1271,8 @@ void EditorComponent::Load()
 		}
 		GetGUI().SetVisible(false);
 		wi::profiler::SetEnabled(false);
-		profilerWnd.SetVisible(false);
-	});
+		profilerWnd.SetVisible(false); });
 	GetGUI().AddWidget(&cinemaButton);
-
 
 	fullscreenButton.Create("Full screen");
 	fullscreenButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -1296,7 +1281,8 @@ void EditorComponent::Load()
 	fullscreenButton.SetTooltip("Toggle full screen");
 	fullscreenButton.SetColor(wi::Color(50, 160, 200, 180), wi::gui::WIDGETSTATE::IDLE);
 	fullscreenButton.SetColor(wi::Color(120, 200, 200, 255), wi::gui::WIDGETSTATE::FOCUS);
-	fullscreenButton.OnClick([this](wi::gui::EventArgs args) {
+	fullscreenButton.OnClick([this](wi::gui::EventArgs args)
+							 {
 		bool fullscreen = main->config.GetBool("fullscreen");
 		fullscreen = !fullscreen;
 		main->config.Set("fullscreen", fullscreen);
@@ -1306,10 +1292,8 @@ void EditorComponent::Load()
 
 			main->SetFullScreen(fullscreen);
 
-		});
-	});
+		}); });
 	topmenuWnd.AddWidget(&fullscreenButton);
-
 
 	bugButton.Create("Bug report");
 	bugButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -1318,11 +1302,9 @@ void EditorComponent::Load()
 	bugButton.SetTooltip("Opens a browser window where you can report a bug or an issue.\nURL: https://github.com/turanszkij/WickedEngine/issues/new");
 	bugButton.SetColor(wi::Color(50, 160, 200, 180), wi::gui::WIDGETSTATE::IDLE);
 	bugButton.SetColor(wi::Color(120, 200, 200, 255), wi::gui::WIDGETSTATE::FOCUS);
-	bugButton.OnClick([](wi::gui::EventArgs args) {
-		wi::helper::OpenUrl("https://github.com/turanszkij/WickedEngine/issues/new");
-	});
+	bugButton.OnClick([](wi::gui::EventArgs args)
+					  { wi::helper::OpenUrl("https://github.com/turanszkij/WickedEngine/issues/new"); });
 	topmenuWnd.AddWidget(&bugButton);
-
 
 	aboutButton.Create("About");
 	aboutButton.SetLocalizationEnabled(wi::gui::LocalizationEnabled::Tooltip);
@@ -1331,9 +1313,8 @@ void EditorComponent::Load()
 	aboutButton.SetTooltip("About...");
 	aboutButton.SetColor(wi::Color(50, 160, 200, 180), wi::gui::WIDGETSTATE::IDLE);
 	aboutButton.SetColor(wi::Color(120, 200, 200, 255), wi::gui::WIDGETSTATE::FOCUS);
-	aboutButton.OnClick([this](wi::gui::EventArgs args) {
-		aboutWindow.SetVisible(!aboutWindow.IsVisible());
-		});
+	aboutButton.OnClick([this](wi::gui::EventArgs args)
+						{ aboutWindow.SetVisible(!aboutWindow.IsVisible()); });
 	topmenuWnd.AddWidget(&aboutButton);
 
 	{
@@ -1413,7 +1394,7 @@ void EditorComponent::Load()
 
 		aboutLabel.Create("AboutLabel");
 		aboutLabel.SetText(ss);
-		aboutLabel.SetSize(XMFLOAT2(600,4000));
+		aboutLabel.SetSize(XMFLOAT2(600, 4000));
 		aboutLabel.SetColor(wi::Color(113, 183, 214, 100));
 		aboutLabel.SetLocalizationEnabled(false);
 		aboutWindow.AddWidget(&aboutLabel);
@@ -1424,10 +1405,10 @@ void EditorComponent::Load()
 		aboutWindow.SetVisible(false);
 		aboutWindow.SetPos(XMFLOAT2(100, 100));
 		aboutWindow.SetSize(XMFLOAT2(640, 480));
-		aboutWindow.OnResize([this]() {
-			aboutLabel.SetSize(XMFLOAT2(aboutWindow.GetWidgetAreaSize().x - 20, aboutLabel.GetSize().y));
-		});
-		aboutWindow.OnCollapse([this](wi::gui::EventArgs args) {
+		aboutWindow.OnResize([this]()
+							 { aboutLabel.SetSize(XMFLOAT2(aboutWindow.GetWidgetAreaSize().x - 20, aboutLabel.GetSize().y)); });
+		aboutWindow.OnCollapse([this](wi::gui::EventArgs args)
+							   {
 			const bool gui_round_enabled = !generalWnd.disableRoundCornersCheckBox.GetCheck();
 			for (int i = 0; i < arraysize(wi::gui::Widget::sprites); ++i)
 			{
@@ -1443,8 +1424,7 @@ void EditorComponent::Load()
 				{
 					aboutWindow.sprites[i].params.disableCornerRounding();
 				}
-			}
-		});
+			} });
 		GetGUI().AddWidget(&aboutWindow);
 	}
 
@@ -1455,9 +1435,8 @@ void EditorComponent::Load()
 	exitButton.SetTooltip("Exit");
 	exitButton.SetColor(wi::Color(160, 50, 50, 180), wi::gui::WIDGETSTATE::IDLE);
 	exitButton.SetColor(wi::Color(200, 50, 50, 255), wi::gui::WIDGETSTATE::FOCUS);
-	exitButton.OnClick([this](wi::gui::EventArgs args) {
-		main->Exit();
-		});
+	exitButton.OnClick([this](wi::gui::EventArgs args)
+					   { main->Exit(); });
 	topmenuWnd.AddWidget(&exitButton);
 
 	guiScalingCombo.Create("GuiScaling");
@@ -1482,9 +1461,8 @@ void EditorComponent::Load()
 	{
 		guiScalingCombo.SetSelectedByUserdataWithoutCallback(100);
 	}
-	guiScalingCombo.OnSelect([this](wi::gui::EventArgs args) {
-		this->main->config.Set("scaling", (int)args.userdata);
-	});
+	guiScalingCombo.OnSelect([this](wi::gui::EventArgs args)
+							 { this->main->config.Set("scaling", (int)args.userdata); });
 	GetGUI().AddWidget(&guiScalingCombo);
 
 	componentsWnd.Create(this);
@@ -1507,7 +1485,8 @@ void EditorComponent::Load()
 
 	generalWnd.RefreshTheme();
 
-	auto load_font = [this](std::string filename) {
+	auto load_font = [this](std::string filename)
+	{
 		font_datas.emplace_back().name = filename;
 		wi::helper::FileRead(filename, font_datas.back().filedata);
 	};
@@ -1515,7 +1494,7 @@ void EditorComponent::Load()
 
 	{
 		size_t current_recent = 0;
-		auto& recent = main->config.GetSection("recent");
+		auto &recent = main->config.GetSection("recent");
 		while (recent.Has(std::to_string(current_recent).c_str()))
 		{
 			recentFilenames.push_back(recent.GetText(std::to_string(current_recent).c_str()));
@@ -1524,7 +1503,7 @@ void EditorComponent::Load()
 	}
 	{
 		size_t current_recent = 0;
-		auto& recent = main->config.GetSection("recent_folders");
+		auto &recent = main->config.GetSection("recent_folders");
 		while (recent.Has(std::to_string(current_recent).c_str()))
 		{
 			recentFolders.push_back(recent.GetText(std::to_string(current_recent).c_str()));
@@ -1547,8 +1526,7 @@ void EditorComponent::Load()
 		arraysize(spline_gradient),
 		1,
 		Format::R8_UNORM,
-		SwizzleFromString("111r")
-	);
+		SwizzleFromString("111r"));
 	assert(success);
 
 	for (int i = 0; i < arraysize(spline_gradient); ++i)
@@ -1564,8 +1542,7 @@ void EditorComponent::Load()
 		arraysize(spline_gradient),
 		1,
 		Format::R8_UNORM,
-		SwizzleFromString("111r")
-	);
+		SwizzleFromString("111r"));
 	assert(success);
 
 	RenderPath2D::Load();
@@ -1573,7 +1550,7 @@ void EditorComponent::Load()
 void EditorComponent::Start()
 {
 	// Add other fonts that were loaded from fonts directory as fallback fonts:
-	for (auto& x : font_datas)
+	for (auto &x : font_datas)
 	{
 		wi::font::AddFontStyle(x.name, x.filedata.data(), x.filedata.size());
 	}
@@ -1582,26 +1559,22 @@ void EditorComponent::Start()
 
 	componentsWnd.RefreshEntityTree();
 
-	//cube
-	//Open("C:/Users/david/OneDrive/Desktop/CS/cs6682/cs6682-final-project/models/AnimatedCube.gltf");
+	// cube
+	// Open(path + "/models/AnimatedCube.gltf");
 
+	// car
 
-	//car
+	// Open("path + "/models/toycar/ToyCar.gltf");
 
-	//Open("C:/Users/david/OneDrive/Desktop/CS/cs6682/cs6682-final-project/models/toycar/ToyCar.gltf");
+	// man
 
+	Open(path + "/models/man/CesiumMan.gltf");
 
-	//man
+	// shaders
 
-
-	Open("C:/Users/david/OneDrive/Desktop/CS/cs6682/cs6682-final-project/models/man/CesiumMan.gltf");
-
-
-	//shaders
-
-	//renderPath->setFXAAEnabled(true);
-	//renderPath->setSharpenFilterEnabled(true);
-	// -----------------------------
+	// renderPath->setFXAAEnabled(true);
+	// renderPath->setSharpenFilterEnabled(true);
+	//  -----------------------------
 
 	RenderPath2D::Start();
 }
@@ -1671,9 +1644,9 @@ void EditorComponent::Update(float dt)
 	}
 	terrain_generation_font.SetHidden(terrain_generation_font_timeout <= 0);
 
-	Scene& scene = GetCurrentScene();
-	EditorScene& editorscene = GetCurrentEditorScene();
-	CameraComponent& camera = editorscene.camera;
+	Scene &scene = GetCurrentScene();
+	EditorScene &editorscene = GetCurrentEditorScene();
+	CameraComponent &camera = editorscene.camera;
 
 	translator.scene = &scene;
 
@@ -1736,10 +1709,10 @@ void EditorComponent::Update(float dt)
 		}
 		if (componentsWnd.rigidWnd.driveCheckbox.GetCheck())
 		{
-			RigidBodyPhysicsComponent* rigidbody = scene.rigidbodies.GetComponent(componentsWnd.rigidWnd.driving_entity);
+			RigidBodyPhysicsComponent *rigidbody = scene.rigidbodies.GetComponent(componentsWnd.rigidWnd.driving_entity);
 			if (rigidbody != nullptr && rigidbody->IsVehicle())
 			{
-				//wi::physics::SetDebugDrawEnabled(true);
+				// wi::physics::SetDebugDrawEnabled(true);
 				float forward = 0;
 				float brake = 0;
 				float handbrake = 0;
@@ -1864,7 +1837,7 @@ void EditorComponent::Update(float dt)
 
 	if (!GetGUI().IsTyping() && !translator.selected.empty() && CheckInput(EditorActions::RENAME_SELECTED))
 	{
-		for (auto& x : translator.selected)
+		for (auto &x : translator.selected)
 		{
 			if (!scene.names.Contains(x.entity))
 			{
@@ -1879,13 +1852,13 @@ void EditorComponent::Update(float dt)
 	// Duplicate Entity
 	if (!GetGUI().IsTyping() && CheckInput(EditorActions::DUPLICATE_ENTITY))
 	{
-		wi::Archive& archive = AdvanceHistory();
+		wi::Archive &archive = AdvanceHistory();
 		archive << HISTORYOP_ADD;
 		RecordSelection(archive);
 
-		auto& prevSel = translator.selectedEntitiesNonRecursive;
+		auto &prevSel = translator.selectedEntitiesNonRecursive;
 		wi::vector<Entity> addedEntities;
-		for (auto& x : prevSel)
+		for (auto &x : prevSel)
 		{
 			wi::scene::PickResult picked;
 			picked.entity = scene.Entity_Duplicate(x);
@@ -1894,7 +1867,7 @@ void EditorComponent::Update(float dt)
 
 		ClearSelected();
 
-		for (auto& x : addedEntities)
+		for (auto &x : addedEntities)
 		{
 			AddSelected(x);
 		}
@@ -1923,9 +1896,9 @@ void EditorComponent::Update(float dt)
 
 		// This check whether pressing left mouse can modify selection:
 		const bool leftmouse_select =
-			!translator.IsInteracting() && // translator shouldn't be active
-			paintToolWnd.GetMode() == PaintToolWindow::MODE::MODE_DISABLED && // paint tool shouldn't be active
-			(!componentsWnd.decalWnd.IsEnabled() || !componentsWnd.decalWnd.placementCheckBox.GetCheck()) && // decal placement shouldn't be active
+			!translator.IsInteracting() &&																					 // translator shouldn't be active
+			paintToolWnd.GetMode() == PaintToolWindow::MODE::MODE_DISABLED &&												 // paint tool shouldn't be active
+			(!componentsWnd.decalWnd.IsEnabled() || !componentsWnd.decalWnd.placementCheckBox.GetCheck()) &&				 // decal placement shouldn't be active
 			!(wi::input::Down(wi::input::KEYBOARD_BUTTON_LCONTROL) && wi::input::Down(wi::input::KEYBOARD_BUTTON_LSHIFT)) && // instance placement shouldn't be active
 			!wi::input::Down(wi::input::KEYBOARD_BUTTON_ALT) &&
 			viewport3D_hitbox.intersects(XMFLOAT2(currentMouse.x, currentMouse.y)) &&
@@ -1992,7 +1965,6 @@ void EditorComponent::Update(float dt)
 		xDif *= cameraWnd.rotationspeedSlider.GetValue();
 		yDif *= cameraWnd.rotationspeedSlider.GetValue();
 
-
 		if (CheckInput(EditorActions::ORTHO_CAMERA))
 		{
 			camera.SetOrtho(!camera.IsOrtho());
@@ -2003,11 +1975,11 @@ void EditorComponent::Update(float dt)
 		if (CheckInput(EditorActions::HIERARCHY_SELECT))
 		{
 			wi::vector<Entity> children;
-			for (auto& x : translator.selectedEntitiesNonRecursive)
+			for (auto &x : translator.selectedEntitiesNonRecursive)
 			{
 				scene.GatherChildren(x, children);
 			}
-			for (auto& x : children)
+			for (auto &x : children)
 			{
 				AddSelected(x);
 			}
@@ -2035,12 +2007,32 @@ void EditorComponent::Update(float dt)
 			if (!wi::input::Down(wi::input::KEYBOARD_BUTTON_LCONTROL))
 			{
 				// Only move camera if control not pressed
-				if (CheckInput(EditorActions::MOVE_CAMERA_LEFT) || wi::input::Down(wi::input::GAMEPAD_BUTTON_LEFT)) { moveNew += XMVectorSet(-1, 0, 0, 0); }
-				if (CheckInput(EditorActions::MOVE_CAMERA_RIGHT) || wi::input::Down(wi::input::GAMEPAD_BUTTON_RIGHT)) { moveNew += XMVectorSet(1, 0, 0, 0); }
-				if (CheckInput(EditorActions::MOVE_CAMERA_FORWARD) || wi::input::Down(wi::input::GAMEPAD_BUTTON_UP)) { moveNew += XMVectorSet(0, 0, 1, 0); camera.ortho_vertical_size -= 0.1f; }
-				if (CheckInput(EditorActions::MOVE_CAMERA_BACKWARD) || wi::input::Down(wi::input::GAMEPAD_BUTTON_DOWN)) { moveNew += XMVectorSet(0, 0, -1, 0); camera.ortho_vertical_size += 0.1f; }
-				if (CheckInput(EditorActions::MOVE_CAMERA_UP) || wi::input::Down(wi::input::GAMEPAD_BUTTON_2)) { moveNew += XMVectorSet(0, 1, 0, 0); }
-				if (CheckInput(EditorActions::MOVE_CAMERA_DOWN) || wi::input::Down(wi::input::GAMEPAD_BUTTON_1)) { moveNew += XMVectorSet(0, -1, 0, 0); }
+				if (CheckInput(EditorActions::MOVE_CAMERA_LEFT) || wi::input::Down(wi::input::GAMEPAD_BUTTON_LEFT))
+				{
+					moveNew += XMVectorSet(-1, 0, 0, 0);
+				}
+				if (CheckInput(EditorActions::MOVE_CAMERA_RIGHT) || wi::input::Down(wi::input::GAMEPAD_BUTTON_RIGHT))
+				{
+					moveNew += XMVectorSet(1, 0, 0, 0);
+				}
+				if (CheckInput(EditorActions::MOVE_CAMERA_FORWARD) || wi::input::Down(wi::input::GAMEPAD_BUTTON_UP))
+				{
+					moveNew += XMVectorSet(0, 0, 1, 0);
+					camera.ortho_vertical_size -= 0.1f;
+				}
+				if (CheckInput(EditorActions::MOVE_CAMERA_BACKWARD) || wi::input::Down(wi::input::GAMEPAD_BUTTON_DOWN))
+				{
+					moveNew += XMVectorSet(0, 0, -1, 0);
+					camera.ortho_vertical_size += 0.1f;
+				}
+				if (CheckInput(EditorActions::MOVE_CAMERA_UP) || wi::input::Down(wi::input::GAMEPAD_BUTTON_2))
+				{
+					moveNew += XMVectorSet(0, 1, 0, 0);
+				}
+				if (CheckInput(EditorActions::MOVE_CAMERA_DOWN) || wi::input::Down(wi::input::GAMEPAD_BUTTON_1))
+				{
+					moveNew += XMVectorSet(0, -1, 0, 0);
+				}
 				moveNew = XMVector3Normalize(moveNew);
 			}
 			moveNew += XMVectorSet(leftStick.x, 0, leftStick.y, 0);
@@ -2145,7 +2137,7 @@ void EditorComponent::Update(float dt)
 				for (size_t i = 0; i < scene.lights.GetCount(); ++i)
 				{
 					Entity entity = scene.lights.GetEntity(i);
-					const LightComponent& light = scene.lights[i];
+					const LightComponent &light = scene.lights[i];
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), XMLoadFloat3(&light.position));
 					float dis = XMVectorGetX(disV);
@@ -2166,8 +2158,7 @@ void EditorComponent::Update(float dt)
 								XMMatrixScaling(siz, siz, siz) *
 								XMMatrixRotationZ(-XM_PIDIV2) *
 								XMMatrixRotationQuaternion(XMLoadFloat4(&light.rotation)) *
-								XMMatrixTranslation(light.position.x, light.position.y, light.position.z)
-								;
+								XMMatrixTranslation(light.position.x, light.position.y, light.position.z);
 
 							const float origin_size = 0.4f * siz;
 							const float axis_length = 18;
@@ -2197,7 +2188,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.constraints.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2213,10 +2204,10 @@ void EditorComponent::Update(float dt)
 			{
 				for (size_t i = 0; i < scene.splines.GetCount(); ++i)
 				{
-					//wi::renderer::DrawBox(XMMatrixTranslationFromVector(scene.splines[i].ClosestPointOnSpline(camera.GetEye())));
+					// wi::renderer::DrawBox(XMMatrixTranslationFromVector(scene.splines[i].ClosestPointOnSpline(camera.GetEye())));
 					for (size_t j = 0; j < scene.splines[i].spline_node_transforms.size(); ++j)
 					{
-						const TransformComponent& transform = scene.splines[i].spline_node_transforms[j];
+						const TransformComponent &transform = scene.splines[i].spline_node_transforms[j];
 						XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 						float dis = XMVectorGetX(disV);
 						if (dis > 0.01f && dis < wi::math::Distance(transform.GetPosition(), pickRay.origin) * 0.025f && dis < hovered.distance)
@@ -2230,7 +2221,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.splines.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2249,7 +2240,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.decals.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2268,7 +2259,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.forces.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2287,7 +2278,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.emitters.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2306,7 +2297,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.hairs.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2325,7 +2316,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.probes.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					if (Sphere(transform.GetPosition(), 1).intersects(pickRay))
 					{
@@ -2346,7 +2337,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.cameras.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2365,7 +2356,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.armatures.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2384,7 +2375,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.sounds.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2403,7 +2394,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.videos.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2422,7 +2413,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.voxel_grids.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2441,7 +2432,7 @@ void EditorComponent::Update(float dt)
 					Entity entity = scene.metadatas.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					XMVECTOR disV = XMVector3LinePointDistance(XMLoadFloat3(&pickRay.origin), XMLoadFloat3(&pickRay.origin) + XMLoadFloat3(&pickRay.direction), transform.GetPositionV());
 					float dis = XMVectorGetX(disV);
@@ -2455,10 +2446,10 @@ void EditorComponent::Update(float dt)
 			}
 			if (bone_picking)
 			{
-				for (auto& it : bone_picking_items)
+				for (auto &it : bone_picking_items)
 				{
 					Entity entity = it.first;
-					const Capsule& capsule = it.second;
+					const Capsule &capsule = it.second;
 					float dis = -1;
 					if (pickRay.intersects(capsule, dis) && dis < hovered.distance)
 					{
@@ -2476,8 +2467,7 @@ void EditorComponent::Update(float dt)
 				{
 					if (
 						wi::input::Down(wi::input::MOUSE_BUTTON_LEFT) ||
-						inspector_mode
-						)
+						inspector_mode)
 					{
 						hovered = wi::scene::Pick(pickRay, wi::enums::FILTER_OBJECT_ALL, ~0u, scene);
 					}
@@ -2511,7 +2501,7 @@ void EditorComponent::Update(float dt)
 						if (result.humanoid_ragdoll_entity != INVALID_ENTITY)
 						{
 							// Ragdoll:
-							HumanoidComponent* humanoid = scene.humanoids.GetComponent(result.humanoid_ragdoll_entity);
+							HumanoidComponent *humanoid = scene.humanoids.GetComponent(result.humanoid_ragdoll_entity);
 							if (humanoid != nullptr)
 							{
 								humanoid->SetRagdollPhysicsEnabled(true);
@@ -2521,7 +2511,7 @@ void EditorComponent::Update(float dt)
 						else
 						{
 							// Rigidbody:
-							RigidBodyPhysicsComponent* rigidbody = scene.rigidbodies.GetComponent(result.entity);
+							RigidBodyPhysicsComponent *rigidbody = scene.rigidbodies.GetComponent(result.entity);
 							if (rigidbody != nullptr)
 							{
 								wi::physics::ApplyImpulseAt(*rigidbody, impulse, result.position_local);
@@ -2558,12 +2548,12 @@ void EditorComponent::Update(float dt)
 					*scene.materials.GetComponent(entity) = *scene.materials.GetComponent(componentsWnd.decalWnd.entity);
 				}
 				// place it on picked surface:
-				TransformComponent& transform = *scene.transforms.GetComponent(entity);
+				TransformComponent &transform = *scene.transforms.GetComponent(entity);
 				transform.MatrixTransform(hovered.orientation);
 				transform.RotateRollPitchYaw(XMFLOAT3(XM_PIDIV2, 0, 0));
 				scene.Component_Attach(entity, hovered.entity);
 
-				wi::Archive& archive = AdvanceHistory();
+				wi::Archive &archive = AdvanceHistory();
 				archive << EditorComponent::HISTORYOP_ADD;
 				RecordSelection(archive);
 				RecordSelection(archive);
@@ -2585,7 +2575,7 @@ void EditorComponent::Update(float dt)
 					}
 					else
 					{
-						const ObjectComponent* object = scene.objects.GetComponent(hovered.entity);
+						const ObjectComponent *object = scene.objects.GetComponent(hovered.entity);
 						if (object != nullptr)
 						{
 							if (object->GetFilterMask() & wi::enums::FILTER_WATER)
@@ -2599,8 +2589,8 @@ void EditorComponent::Update(float dt)
 								for (size_t i = 0; i < scene.hairs.GetCount(); ++i)
 								{
 									Entity entity = scene.hairs.GetEntity(i);
-									const wi::HairParticleSystem& hair = scene.hairs[i];
-									HierarchyComponent* hier = scene.hierarchy.GetComponent(entity);
+									const wi::HairParticleSystem &hair = scene.hairs[i];
+									HierarchyComponent *hier = scene.hierarchy.GetComponent(entity);
 									if (hair.meshID == hovered.entity || (hier != nullptr && hier->parentID == hovered.entity))
 									{
 										XMVECTOR P = XMLoadFloat3(&hovered.position);
@@ -2609,8 +2599,8 @@ void EditorComponent::Update(float dt)
 										{
 											grass_interaction_entity = CreateEntity();
 										}
-										ForceFieldComponent& force = scene.forces.Create(grass_interaction_entity);
-										TransformComponent& transform = scene.transforms.Create(grass_interaction_entity);
+										ForceFieldComponent &force = scene.forces.Create(grass_interaction_entity);
+										TransformComponent &transform = scene.transforms.Create(grass_interaction_entity);
 										force.type = ForceFieldComponent::Type::Point;
 										force.gravity = -40;
 										force.range = 2;
@@ -2628,18 +2618,18 @@ void EditorComponent::Update(float dt)
 		// Select top-level parent...
 		if (altmouse_select_parent && hovered.entity != INVALID_ENTITY)
 		{
-			const HierarchyComponent* hierarchy = scene.hierarchy.GetComponent(hovered.entity);
+			const HierarchyComponent *hierarchy = scene.hierarchy.GetComponent(hovered.entity);
 			if (hierarchy != nullptr && hierarchy->parentID != INVALID_ENTITY)
 			{
 				Entity topParent = hierarchy->parentID;
-				const HierarchyComponent* parentHierarchy = scene.hierarchy.GetComponent(topParent);
+				const HierarchyComponent *parentHierarchy = scene.hierarchy.GetComponent(topParent);
 				while (parentHierarchy != nullptr && parentHierarchy->parentID != INVALID_ENTITY)
 				{
 					topParent = parentHierarchy->parentID;
 					parentHierarchy = scene.hierarchy.GetComponent(topParent);
 				}
 
-				wi::Archive& archive = AdvanceHistory(true);
+				wi::Archive &archive = AdvanceHistory(true);
 				archive << HISTORYOP_SELECTION;
 				// record PREVIOUS selection state...
 				RecordSelection(archive);
@@ -2658,7 +2648,7 @@ void EditorComponent::Update(float dt)
 		// Select...
 		if (leftmouse_select || selectAll || clear_selected)
 		{
-			wi::Archive& archive = AdvanceHistory(true);
+			wi::Archive &archive = AdvanceHistory(true);
 			archive << HISTORYOP_SELECTION;
 			// record PREVIOUS selection state...
 			RecordSelection(archive);
@@ -2671,7 +2661,7 @@ void EditorComponent::Update(float dt)
 
 				selectAllStorage.clear();
 				scene.FindAllEntities(selectAllStorage);
-				for (auto& entity : selectAllStorage)
+				for (auto &entity : selectAllStorage)
 				{
 					AddSelected(entity);
 				}
@@ -2685,7 +2675,7 @@ void EditorComponent::Update(float dt)
 					// Union selection:
 					wi::vector<wi::scene::PickResult> saved = translator.selected;
 					translator.selected.clear();
-					for (const wi::scene::PickResult& picked : saved)
+					for (const wi::scene::PickResult &picked : saved)
 					{
 						AddSelected(picked);
 					}
@@ -2708,13 +2698,11 @@ void EditorComponent::Update(float dt)
 				ClearSelected();
 			}
 
-
 			// record NEW selection state...
 			RecordSelection(archive);
 
 			componentsWnd.RefreshEntityTree();
 		}
-
 	}
 
 	main->infoDisplay.colorgrading_helper = false;
@@ -2788,12 +2776,12 @@ void EditorComponent::Update(float dt)
 		// Copy
 		if (CheckInput(EditorActions::COPY_ACTION))
 		{
-			auto& prevSel = translator.selectedEntitiesNonRecursive;
+			auto &prevSel = translator.selectedEntitiesNonRecursive;
 
 			EntitySerializer seri;
 			clipboard.SetReadModeAndResetPos(false);
 			clipboard << prevSel.size();
-			for (auto& x : prevSel)
+			for (auto &x : prevSel)
 			{
 				scene.Entity_Serialize(clipboard, seri, x);
 			}
@@ -2802,12 +2790,12 @@ void EditorComponent::Update(float dt)
 		// Cut
 		if (CheckInput(EditorActions::CUT_ACTION))
 		{
-			auto& prevSel = translator.selectedEntitiesNonRecursive;
+			auto &prevSel = translator.selectedEntitiesNonRecursive;
 
 			EntitySerializer seri;
 			clipboard.SetReadModeAndResetPos(false);
 			clipboard << prevSel.size();
-			for (auto& x : prevSel)
+			for (auto &x : prevSel)
 			{
 				scene.Entity_Serialize(clipboard, seri, x);
 			}
@@ -2818,7 +2806,7 @@ void EditorComponent::Update(float dt)
 		// Paste
 		if (CheckInput(EditorActions::PASTE_ACTION))
 		{
-			wi::Archive& archive = AdvanceHistory();
+			wi::Archive &archive = AdvanceHistory();
 			archive << HISTORYOP_ADD;
 			RecordSelection(archive);
 
@@ -2854,12 +2842,12 @@ void EditorComponent::Update(float dt)
 			for (size_t i = 0; i < count; ++i)
 			{
 				Entity entity = scene.Entity_Serialize(clipboard, seri, INVALID_ENTITY, Scene::EntitySerializeFlags::RECURSIVE | Scene::EntitySerializeFlags::KEEP_INTERNAL_ENTITY_REFERENCES);
-				const HierarchyComponent* hier = scene.hierarchy.GetComponent(entity);
+				const HierarchyComponent *hier = scene.hierarchy.GetComponent(entity);
 				if (hier != nullptr)
 				{
 					scene.Component_Detach(entity);
 				}
-				TransformComponent* transform = scene.transforms.GetComponent(entity);
+				TransformComponent *transform = scene.transforms.GetComponent(entity);
 				if (transform != nullptr)
 				{
 					transform->translation_local = {};
@@ -2878,9 +2866,9 @@ void EditorComponent::Update(float dt)
 					scene.Component_Attach(entity, hier->parentID);
 				}
 				addedEntities.push_back(entity);
-				}
+			}
 
-			wi::Archive& archive = AdvanceHistory();
+			wi::Archive &archive = AdvanceHistory();
 			archive << HISTORYOP_ADD;
 			// because selection didn't change here, we record same selection state twice, it's not a bug:
 			RecordSelection(archive);
@@ -2939,17 +2927,17 @@ void EditorComponent::Update(float dt)
 	if (deleting)
 	{
 		deleting = false;
-		wi::Archive& archive = AdvanceHistory();
+		wi::Archive &archive = AdvanceHistory();
 		archive << HISTORYOP_DELETE;
 		RecordSelection(archive);
 
 		archive << translator.selectedEntitiesNonRecursive;
 		EntitySerializer seri;
-		for (auto& x : translator.selectedEntitiesNonRecursive)
+		for (auto &x : translator.selectedEntitiesNonRecursive)
 		{
 			scene.Entity_Serialize(archive, seri, x);
 		}
-		for (auto& x : translator.selectedEntitiesNonRecursive)
+		for (auto &x : translator.selectedEntitiesNonRecursive)
 		{
 			scene.Entity_Remove(x);
 		}
@@ -3000,7 +2988,7 @@ void EditorComponent::Update(float dt)
 	}
 	else
 	{
-		const wi::scene::PickResult& picked = translator.selected.back();
+		const wi::scene::PickResult &picked = translator.selected.back();
 
 		assert(picked.entity != INVALID_ENTITY);
 		cameraWnd.SetEntity(picked.entity);
@@ -3041,7 +3029,7 @@ void EditorComponent::Update(float dt)
 		bool found_material = false;
 		bool found_spline = false;
 
-		const ObjectComponent* object = scene.objects.GetComponent(picked.entity);
+		const ObjectComponent *object = scene.objects.GetComponent(picked.entity);
 		if (object != nullptr) // maybe it was deleted...
 		{
 			found_object = true;
@@ -3052,7 +3040,7 @@ void EditorComponent::Update(float dt)
 			found_mesh = scene.meshes.Contains(object->meshID);
 			found_soft = scene.softbodies.Contains(object->meshID);
 
-			const MeshComponent* mesh = scene.meshes.GetComponent(object->meshID);
+			const MeshComponent *mesh = scene.meshes.GetComponent(object->meshID);
 			if (mesh != nullptr && (int)mesh->subsets.size() > picked.subsetIndex)
 			{
 				found_material = scene.materials.Contains(mesh->subsets[picked.subsetIndex].materialID);
@@ -3060,7 +3048,7 @@ void EditorComponent::Update(float dt)
 			}
 		}
 
-		for (auto& x : translator.selected)
+		for (auto &x : translator.selected)
 		{
 			if (!found_object && scene.objects.Contains(x.entity))
 			{
@@ -3086,7 +3074,7 @@ void EditorComponent::Update(float dt)
 			// Indirectly bind selected to spline window if selected is part of a spline:
 			for (size_t i = 0; i < scene.splines.GetCount(); ++i)
 			{
-				const SplineComponent& spline = scene.splines[i];
+				const SplineComponent &spline = scene.splines[i];
 				Entity spline_entity = scene.splines.GetEntity(i);
 				if (x.entity == spline_entity)
 				{
@@ -3126,7 +3114,6 @@ void EditorComponent::Update(float dt)
 		{
 			componentsWnd.splineWnd.SetEntity(INVALID_ENTITY);
 		}
-
 	}
 
 	// Clear highlight state:
@@ -3138,18 +3125,18 @@ void EditorComponent::Update(float dt)
 	{
 		scene.objects[i].SetUserStencilRef(EDITORSTENCILREF_CLEAR);
 	}
-	for (auto& x : translator.selected)
+	for (auto &x : translator.selected)
 	{
-		ObjectComponent* object = scene.objects.GetComponent(x.entity);
+		ObjectComponent *object = scene.objects.GetComponent(x.entity);
 		if (object != nullptr) // maybe it was deleted...
 		{
 			object->SetUserStencilRef(EDITORSTENCILREF_HIGHLIGHT_OBJECT);
 			if (x.subsetIndex >= 0)
 			{
-				const MeshComponent* mesh = scene.meshes.GetComponent(object->meshID);
+				const MeshComponent *mesh = scene.meshes.GetComponent(object->meshID);
 				if (mesh != nullptr && (int)mesh->subsets.size() > x.subsetIndex)
 				{
-					MaterialComponent* material = scene.materials.GetComponent(mesh->subsets[x.subsetIndex].materialID);
+					MaterialComponent *material = scene.materials.GetComponent(mesh->subsets[x.subsetIndex].materialID);
 					if (material != nullptr)
 					{
 						material->SetUserStencilRef(EDITORSTENCILREF_HIGHLIGHT_MATERIAL);
@@ -3162,7 +3149,7 @@ void EditorComponent::Update(float dt)
 	if (translator.IsDragEnded())
 	{
 		EntitySerializer seri;
-		wi::Archive& archive = AdvanceHistory();
+		wi::Archive &archive = AdvanceHistory();
 		archive << HISTORYOP_TRANSLATOR;
 		archive << translator.isTranslator;
 		archive << translator.isRotator;
@@ -3180,14 +3167,14 @@ void EditorComponent::Update(float dt)
 	// Follow camera proxy:
 	if (cameraWnd.followCheckBox.IsEnabled() && cameraWnd.followCheckBox.GetCheck())
 	{
-		TransformComponent* proxy = scene.transforms.GetComponent(cameraWnd.entity);
+		TransformComponent *proxy = scene.transforms.GetComponent(cameraWnd.entity);
 		if (proxy != nullptr)
 		{
 			editorscene.camera_transform.Lerp(editorscene.camera_transform, *proxy, 1.0f - cameraWnd.followSlider.GetValue());
 			editorscene.camera_transform.UpdateTransform();
 		}
 
-		CameraComponent* proxy_camera = scene.cameras.GetComponent(cameraWnd.entity);
+		CameraComponent *proxy_camera = scene.cameras.GetComponent(cameraWnd.entity);
 		if (proxy_camera != nullptr)
 		{
 			editorscene.camera.Lerp(editorscene.camera, *proxy_camera, 1.0f - cameraWnd.followSlider.GetValue());
@@ -3259,35 +3246,31 @@ void EditorComponent::Update(float dt)
 		navtest_pathquery.flying = false;
 		if (
 			navtest_start_pick.entity != INVALID_ENTITY &&
-			navtest_goal_pick.entity != INVALID_ENTITY
-			)
+			navtest_goal_pick.entity != INVALID_ENTITY)
 		{
 			navtest_start_pick.position = scene.GetPositionOnSurface(
 				navtest_start_pick.entity,
 				navtest_start_pick.vertexID0,
 				navtest_start_pick.vertexID1,
 				navtest_start_pick.vertexID2,
-				navtest_start_pick.bary
-			);
+				navtest_start_pick.bary);
 			navtest_goal_pick.position = scene.GetPositionOnSurface(
 				navtest_goal_pick.entity,
 				navtest_goal_pick.vertexID0,
 				navtest_goal_pick.vertexID1,
 				navtest_goal_pick.vertexID2,
-				navtest_goal_pick.bary
-			);
+				navtest_goal_pick.bary);
 		}
-		else if(
+		else if (
 			navtest_start_pick.entity == INVALID_ENTITY &&
-			navtest_goal_pick.entity == INVALID_ENTITY
-			)
+			navtest_goal_pick.entity == INVALID_ENTITY)
 		{
 			navtest_pathquery.flying = true;
 		}
 
 		for (size_t i = 0; i < scene.voxel_grids.GetCount(); ++i)
 		{
-			const wi::VoxelGrid& voxelgrid = scene.voxel_grids[i];
+			const wi::VoxelGrid &voxelgrid = scene.voxel_grids[i];
 			AABB aabb = voxelgrid.get_aabb();
 			if (aabb.intersects(navtest_start_pick.position) && aabb.intersects(navtest_goal_pick.position))
 			{
@@ -3295,19 +3278,17 @@ void EditorComponent::Update(float dt)
 				navtest_pathquery.process(
 					navtest_start_pick.position,
 					navtest_goal_pick.position,
-					voxelgrid
-				);
+					voxelgrid);
 				wi::profiler::EndRange(range);
 				wi::renderer::DrawPathQuery(&navtest_pathquery);
 				break;
 			}
 		}
-
 	}
 
 	bool force_collider_visualizer = false;
 	bool force_spring_visualizer = false;
-	for (auto& x : translator.selected)
+	for (auto &x : translator.selected)
 	{
 		if (scene.colliders.Contains(x.entity))
 		{
@@ -3362,9 +3343,9 @@ void EditorComponent::PostUpdate()
 
 	renderPath->PostUpdate();
 
-	Scene& scene = GetCurrentScene();
-	EditorScene& editorscene = GetCurrentEditorScene();
-	CameraComponent& camera = editorscene.camera;
+	Scene &scene = GetCurrentScene();
+	EditorScene &editorscene = GetCurrentEditorScene();
+	CameraComponent &camera = editorscene.camera;
 
 	// This needs to be after scene was updated fully by EditorComponent's renderPath
 	//	Because this will just render the scene without updating its resources
@@ -3393,10 +3374,10 @@ void EditorComponent::PostUpdate()
 	// Drive mode camera override is done in PostUpdate so that most recent physics updates are available:
 	if (drive_mode)
 	{
-		RigidBodyPhysicsComponent* rigidbody = scene.rigidbodies.GetComponent(componentsWnd.rigidWnd.driving_entity);
+		RigidBodyPhysicsComponent *rigidbody = scene.rigidbodies.GetComponent(componentsWnd.rigidWnd.driving_entity);
 		if (rigidbody != nullptr && rigidbody->IsVehicle())
 		{
-			TransformComponent* vehicle_transform = scene.transforms.GetComponent(componentsWnd.rigidWnd.driving_entity);
+			TransformComponent *vehicle_transform = scene.transforms.GetComponent(componentsWnd.rigidWnd.driving_entity);
 			if (vehicle_transform != nullptr)
 			{
 				XMVECTOR P = vehicle_transform->GetPositionV();
@@ -3425,10 +3406,10 @@ void EditorComponent::PostUpdate()
 		spline_renderer.Clear();
 		for (size_t i = 0; i < scene.splines.GetCount(); ++i)
 		{
-			const SplineComponent& spline = scene.splines[i];
+			const SplineComponent &spline = scene.splines[i];
 			for (size_t j = 0; j < spline.spline_node_transforms.size(); ++j)
 			{
-				const TransformComponent& node_transform = spline.spline_node_transforms[j];
+				const TransformComponent &node_transform = spline.spline_node_transforms[j];
 				spline_renderer.AddPoint(node_transform.GetPosition(), std::max(0.0f, node_transform.GetScale().x), XMFLOAT4(1, 1, 1, 1), spline.IsDrawAligned() ? node_transform.GetRotation() : XMFLOAT4(0, 0, 0, 0));
 			}
 			spline_renderer.Cut(spline.IsLooped());
@@ -3441,7 +3422,7 @@ void EditorComponent::PostUpdate()
 	static int captureFrameIdx = 0;
 	static int captureFramePeriod = 15;
 
-	static std::string captureDir = "C:/Users/david/OneDrive/Desktop/CS/cs6682/cs6682-final-project/output";
+	static std::string captureDir = path + "/output";
 
 	if (wi::input::Press(wi::input::KEYBOARD_BUTTON_F9))
 	{
@@ -3451,7 +3432,7 @@ void EditorComponent::PostUpdate()
 		wi::backlog::post("[Capture] Started capturing frames...");
 	}
 
-	if (capturing && (captureFrame%captureFramePeriod==0) &&  captureFrameIdx< captureFramesTotal)
+	if (capturing && (captureFrame % captureFramePeriod == 0) && captureFrameIdx < captureFramesTotal)
 	{
 		std::string filename = wi::helper::screenshot(main->swapChain);
 		wi::backlog::post("[Capture] Saved to: " + filename);
@@ -3472,8 +3453,8 @@ void EditorComponent::PreRender()
 }
 void EditorComponent::Render() const
 {
-	const Scene& scene = GetCurrentScene();
-	const CameraComponent& camera = GetCurrentEditorScene().camera;
+	const Scene &scene = GetCurrentScene();
+	const CameraComponent &camera = GetCurrentEditorScene().camera;
 
 	// remove camera jittering
 	CameraComponent cam = *renderPath->camera;
@@ -3486,43 +3467,43 @@ void EditorComponent::Render() const
 	{
 		if (hovered.entity != INVALID_ENTITY)
 		{
-			const ObjectComponent* object = scene.objects.GetComponent(hovered.entity);
+			const ObjectComponent *object = scene.objects.GetComponent(hovered.entity);
 			if (object != nullptr)
 			{
-				const AABB& aabb = scene.aabb_objects[scene.objects.GetIndex(hovered.entity)];
+				const AABB &aabb = scene.aabb_objects[scene.objects.GetIndex(hovered.entity)];
 
 				XMFLOAT4X4 hoverBox;
 				XMStoreFloat4x4(&hoverBox, aabb.getAsBoxMatrix());
 				wi::renderer::DrawBox(hoverBox, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f));
 			}
 
-			const LightComponent* light = scene.lights.GetComponent(hovered.entity);
+			const LightComponent *light = scene.lights.GetComponent(hovered.entity);
 			if (light != nullptr)
 			{
-				const AABB& aabb = scene.aabb_lights[scene.lights.GetIndex(hovered.entity)];
+				const AABB &aabb = scene.aabb_lights[scene.lights.GetIndex(hovered.entity)];
 
 				XMFLOAT4X4 hoverBox;
 				XMStoreFloat4x4(&hoverBox, aabb.getAsBoxMatrix());
 				wi::renderer::DrawBox(hoverBox, XMFLOAT4(0.5f, 0.5f, 0, 0.5f));
 			}
 
-			const DecalComponent* decal = scene.decals.GetComponent(hovered.entity);
+			const DecalComponent *decal = scene.decals.GetComponent(hovered.entity);
 			if (decal != nullptr)
 			{
 				wi::renderer::DrawBox(decal->world, XMFLOAT4(0.5f, 0, 0.5f, 0.5f));
 			}
 
-			const EnvironmentProbeComponent* probe = scene.probes.GetComponent(hovered.entity);
+			const EnvironmentProbeComponent *probe = scene.probes.GetComponent(hovered.entity);
 			if (probe != nullptr)
 			{
-				const AABB& aabb = scene.aabb_probes[scene.probes.GetIndex(hovered.entity)];
+				const AABB &aabb = scene.aabb_probes[scene.probes.GetIndex(hovered.entity)];
 
 				XMFLOAT4X4 hoverBox;
 				XMStoreFloat4x4(&hoverBox, aabb.getAsBoxMatrix());
 				wi::renderer::DrawBox(hoverBox, XMFLOAT4(0.5f, 0.5f, 0.5f, 0.5f));
 			}
 
-			const wi::HairParticleSystem* hair = scene.hairs.GetComponent(hovered.entity);
+			const wi::HairParticleSystem *hair = scene.hairs.GetComponent(hovered.entity);
 			if (hair != nullptr)
 			{
 				XMFLOAT4X4 hoverBox;
@@ -3538,28 +3519,28 @@ void EditorComponent::Render() const
 		AABB selectedAABB = AABB(
 			XMFLOAT3(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max()),
 			XMFLOAT3(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest()));
-		for (auto& picked : translator.selected)
+		for (auto &picked : translator.selected)
 		{
 			if (picked.entity != INVALID_ENTITY)
 			{
-				const ObjectComponent* object = scene.objects.GetComponent(picked.entity);
+				const ObjectComponent *object = scene.objects.GetComponent(picked.entity);
 				if (object != nullptr)
 				{
-					const AABB& aabb = scene.aabb_objects[scene.objects.GetIndex(picked.entity)];
+					const AABB &aabb = scene.aabb_objects[scene.objects.GetIndex(picked.entity)];
 					selectedAABB = AABB::Merge(selectedAABB, aabb);
 				}
 
-				const LightComponent* light = scene.lights.GetComponent(picked.entity);
+				const LightComponent *light = scene.lights.GetComponent(picked.entity);
 				if (light != nullptr)
 				{
-					const AABB& aabb = scene.aabb_lights[scene.lights.GetIndex(picked.entity)];
+					const AABB &aabb = scene.aabb_lights[scene.lights.GetIndex(picked.entity)];
 					selectedAABB = AABB::Merge(selectedAABB, aabb);
 				}
 
-				const DecalComponent* decal = scene.decals.GetComponent(picked.entity);
+				const DecalComponent *decal = scene.decals.GetComponent(picked.entity);
 				if (decal != nullptr)
 				{
-					const AABB& aabb = scene.aabb_decals[scene.decals.GetIndex(picked.entity)];
+					const AABB &aabb = scene.aabb_decals[scene.decals.GetIndex(picked.entity)];
 					selectedAABB = AABB::Merge(selectedAABB, aabb);
 
 					// also display decal OBB:
@@ -3568,19 +3549,18 @@ void EditorComponent::Render() const
 					wi::renderer::DrawBox(selectionBox, XMFLOAT4(1, 0, 1, 1));
 				}
 
-				const EnvironmentProbeComponent* probe = scene.probes.GetComponent(picked.entity);
+				const EnvironmentProbeComponent *probe = scene.probes.GetComponent(picked.entity);
 				if (probe != nullptr)
 				{
-					const AABB& aabb = scene.aabb_probes[scene.probes.GetIndex(picked.entity)];
+					const AABB &aabb = scene.aabb_probes[scene.probes.GetIndex(picked.entity)];
 					selectedAABB = AABB::Merge(selectedAABB, aabb);
 				}
 
-				const wi::HairParticleSystem* hair = scene.hairs.GetComponent(picked.entity);
+				const wi::HairParticleSystem *hair = scene.hairs.GetComponent(picked.entity);
 				if (hair != nullptr)
 				{
 					selectedAABB = AABB::Merge(selectedAABB, hair->aabb);
 				}
-
 			}
 		}
 
@@ -3594,7 +3574,7 @@ void EditorComponent::Render() const
 	// Editor custom render:
 	if (GetGUI().IsVisible())
 	{
-		GraphicsDevice* device = wi::graphics::GetDevice();
+		GraphicsDevice *device = wi::graphics::GetDevice();
 		CommandList cmd = device->BeginCommandList();
 		device->EventBegin("Editor", cmd);
 
@@ -3624,14 +3604,12 @@ void EditorComponent::Render() const
 						RenderPassImage::RenderTarget(
 							&rt_selectionOutline_MSAA,
 							RenderPassImage::LoadOp::CLEAR,
-							RenderPassImage::StoreOp::DONTCARE
-						),
+							RenderPassImage::StoreOp::DONTCARE),
 						RenderPassImage::Resolve(&rt_selectionOutline[0]),
 						RenderPassImage::DepthStencil(
 							renderPath->GetDepthStencil(),
 							RenderPassImage::LoadOp::LOAD,
-							RenderPassImage::StoreOp::STORE
-						),
+							RenderPassImage::StoreOp::STORE),
 					};
 					device->RenderPassBegin(rp, arraysize(rp), cmd);
 				}
@@ -3642,8 +3620,7 @@ void EditorComponent::Render() const
 						RenderPassImage::DepthStencil(
 							renderPath->GetDepthStencil(),
 							RenderPassImage::LoadOp::LOAD,
-							RenderPassImage::StoreOp::STORE
-						),
+							RenderPassImage::StoreOp::STORE),
 					};
 					device->RenderPassBegin(rp, arraysize(rp), cmd);
 				}
@@ -3665,8 +3642,7 @@ void EditorComponent::Render() const
 						RenderPassImage::DepthStencil(
 							renderPath->GetDepthStencil(),
 							RenderPassImage::LoadOp::LOAD,
-							RenderPassImage::StoreOp::STORE
-						),
+							RenderPassImage::StoreOp::STORE),
 					};
 					device->RenderPassBegin(rp, arraysize(rp), cmd);
 				}
@@ -3677,8 +3653,7 @@ void EditorComponent::Render() const
 						RenderPassImage::DepthStencil(
 							renderPath->GetDepthStencil(),
 							RenderPassImage::LoadOp::LOAD,
-							RenderPassImage::StoreOp::STORE
-						),
+							RenderPassImage::StoreOp::STORE),
 					};
 					device->RenderPassBegin(rp, arraysize(rp), cmd);
 				}
@@ -3694,7 +3669,7 @@ void EditorComponent::Render() const
 		}
 
 		// Reference dummy render:
-		if(dummy_enabled)
+		if (dummy_enabled)
 		{
 			device->EventBegin("Reference Dummy", cmd);
 			RenderPassImage rp[] = {
@@ -3713,7 +3688,7 @@ void EditorComponent::Render() const
 			}
 			else
 			{
-				dummy::draw_female(XMMatrixTranslation(dummy_pos.x, dummy_pos.y, dummy_pos.z)* VP, XMFLOAT4(1, 1, 1, 1), false, cmd);
+				dummy::draw_female(XMMatrixTranslation(dummy_pos.x, dummy_pos.y, dummy_pos.z) * VP, XMFLOAT4(1, 1, 1, 1), false, cmd);
 			}
 
 			device->RenderPassEnd(cmd);
@@ -3764,8 +3739,8 @@ void EditorComponent::Render() const
 				Entity entity = scene.metadatas.GetEntity(i);
 				if (!scene.transforms.Contains(entity))
 					continue;
-				const TransformComponent& transform = *scene.transforms.GetComponent(entity);
-				const MetadataComponent& metadata = scene.metadatas[i];
+				const TransformComponent &transform = *scene.transforms.GetComponent(entity);
+				const MetadataComponent &metadata = scene.metadatas[i];
 
 				fp.position = transform.GetPosition();
 
@@ -3821,7 +3796,7 @@ void EditorComponent::Render() const
 
 		// Full resolution:
 		{
-			const Texture& render_result = renderPath->GetRenderResult();
+			const Texture &render_result = renderPath->GetRenderResult();
 			if (getMSAASampleCount() > 1)
 			{
 				RenderPassImage rp[] = {
@@ -3830,14 +3805,12 @@ void EditorComponent::Render() const
 						RenderPassImage::LoadOp::CLEAR,
 						RenderPassImage::StoreOp::DONTCARE,
 						ResourceState::RENDERTARGET,
-						ResourceState::RENDERTARGET
-					),
+						ResourceState::RENDERTARGET),
 					RenderPassImage::Resolve(&render_result),
 					RenderPassImage::DepthStencil(
 						&editor_depthbuffer,
 						RenderPassImage::LoadOp::CLEAR,
-						RenderPassImage::StoreOp::DONTCARE
-					),
+						RenderPassImage::StoreOp::DONTCARE),
 				};
 				device->RenderPassBegin(rp, arraysize(rp), cmd);
 			}
@@ -3846,13 +3819,11 @@ void EditorComponent::Render() const
 				RenderPassImage rp[] = {
 					RenderPassImage::RenderTarget(
 						&render_result,
-						RenderPassImage::LoadOp::CLEAR
-					),
+						RenderPassImage::LoadOp::CLEAR),
 					RenderPassImage::DepthStencil(
 						&editor_depthbuffer,
 						RenderPassImage::LoadOp::CLEAR,
-						RenderPassImage::StoreOp::DONTCARE
-					),
+						RenderPassImage::StoreOp::DONTCARE),
 				};
 				device->RenderPassBegin(rp, arraysize(rp), cmd);
 			}
@@ -3915,7 +3886,7 @@ void EditorComponent::Render() const
 			{
 				for (size_t i = 0; i < scene.lights.GetCount(); ++i)
 				{
-					const LightComponent& light = scene.lights[i];
+					const LightComponent &light = scene.lights[i];
 					Entity entity = scene.lights.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
@@ -3930,7 +3901,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -3964,7 +3935,8 @@ void EditorComponent::Render() const
 						static PipelineState pso;
 						if (!pso.IsValid())
 						{
-							static auto LoadShaders = [] {
+							static auto LoadShaders = []
+							{
 								PipelineStateDesc desc;
 								desc.vs = wi::renderer::GetShader(wi::enums::VSTYPE_VERTEXCOLOR);
 								desc.ps = wi::renderer::GetShader(wi::enums::PSTYPE_VERTEXCOLOR);
@@ -3975,7 +3947,8 @@ void EditorComponent::Render() const
 								desc.pt = PrimitiveTopology::TRIANGLELIST;
 								wi::graphics::GetDevice()->CreatePipelineState(&desc, &pso);
 							};
-							static wi::eventhandler::Handle handle = wi::eventhandler::Subscribe(wi::eventhandler::EVENT_RELOAD_SHADERS, [](uint64_t userdata) { LoadShaders(); });
+							static wi::eventhandler::Handle handle = wi::eventhandler::Subscribe(wi::eventhandler::EVENT_RELOAD_SHADERS, [](uint64_t userdata)
+																								 { LoadShaders(); });
 							LoadShaders();
 						}
 						struct Vertex
@@ -3997,8 +3970,7 @@ void EditorComponent::Render() const
 							XMMatrixScaling(siz, siz, siz) *
 							XMMatrixRotationZ(-XM_PIDIV2) *
 							XMMatrixRotationQuaternion(XMLoadFloat4(&light.rotation)) *
-							XMMatrixTranslation(light.position.x, light.position.y, light.position.z)
-							;
+							XMMatrixTranslation(light.position.x, light.position.y, light.position.z);
 
 						const XMFLOAT4 col = fp.color;
 						const XMFLOAT4 col_fade = XMFLOAT4(col.x, col.y, col.z, 0);
@@ -4007,7 +3979,7 @@ void EditorComponent::Render() const
 						const float axis_length = 18;
 						float cylinder_length = axis_length;
 						cylinder_length -= cone_length;
-						uint8_t* dst = (uint8_t*)mem.data;
+						uint8_t *dst = (uint8_t *)mem.data;
 						for (uint32_t i = 0; i < segmentCount; ++i)
 						{
 							const float angle0 = (float)i / (float)segmentCount * XM_2PI;
@@ -4023,7 +3995,7 @@ void EditorComponent::Render() const
 									{XMFLOAT4(cylinder_length, std::sin(angle1) * cylinder_radius, std::cos(angle1) * cylinder_radius, 1), col},
 									{XMFLOAT4(0, std::sin(angle1) * cylinder_radius, std::cos(angle1) * cylinder_radius, 1), col_fade},
 								};
-								for (auto& vert : verts)
+								for (auto &vert : verts)
 								{
 									XMStoreFloat4(&vert.position, XMVector3Transform(XMLoadFloat4(&vert.position), M));
 								}
@@ -4038,7 +4010,7 @@ void EditorComponent::Render() const
 									{XMFLOAT4(cylinder_length, std::sin(angle0) * cone_radius, std::cos(angle0) * cone_radius, 1), col},
 									{XMFLOAT4(cylinder_length, std::sin(angle1) * cone_radius, std::cos(angle1) * cone_radius, 1), col},
 								};
-								for (auto& vert : verts)
+								for (auto &vert : verts)
 								{
 									XMStoreFloat4(&vert.position, XMVector3Transform(XMLoadFloat4(&vert.position), M));
 								}
@@ -4046,7 +4018,7 @@ void EditorComponent::Render() const
 								dst += sizeof(verts);
 							}
 						}
-						const GPUBuffer* vbs[] = {
+						const GPUBuffer *vbs[] = {
 							&mem.buffer,
 						};
 						const uint32_t strides[] = {
@@ -4069,7 +4041,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.constraints.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4079,7 +4051,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4088,9 +4060,7 @@ void EditorComponent::Render() const
 						}
 					}
 
-
 					wi::font::Draw(ICON_CONSTRAINT, fp, cmd);
-
 				}
 			}
 
@@ -4101,7 +4071,7 @@ void EditorComponent::Render() const
 					for (size_t j = 0; j < scene.splines[i].spline_node_transforms.size(); ++j)
 					{
 						Entity entity = scene.splines[i].spline_node_entities[j];
-						const TransformComponent& transform = scene.splines[i].spline_node_transforms[j];
+						const TransformComponent &transform = scene.splines[i].spline_node_transforms[j];
 
 						fp.position = transform.GetPosition();
 						fp.scaling = 0.5f * scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4111,7 +4081,7 @@ void EditorComponent::Render() const
 						{
 							fp.color = hoveredEntityColor;
 						}
-						for (auto& picked : translator.selected)
+						for (auto &picked : translator.selected)
 						{
 							if (picked.entity == entity)
 							{
@@ -4125,7 +4095,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.splines.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4135,7 +4105,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4154,7 +4124,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.decals.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4164,7 +4134,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4173,9 +4143,7 @@ void EditorComponent::Render() const
 						}
 					}
 
-
 					wi::font::Draw(ICON_DECAL, fp, cmd);
-
 				}
 			}
 
@@ -4186,7 +4154,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.forces.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4196,7 +4164,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4204,7 +4172,6 @@ void EditorComponent::Render() const
 							break;
 						}
 					}
-
 
 					wi::font::Draw(ICON_FORCE, fp, cmd);
 				}
@@ -4217,7 +4184,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.cameras.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4227,7 +4194,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4235,7 +4202,6 @@ void EditorComponent::Render() const
 							break;
 						}
 					}
-
 
 					wi::font::Draw(ICON_CAMERA, fp, cmd);
 				}
@@ -4248,7 +4214,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.armatures.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4258,7 +4224,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4266,7 +4232,6 @@ void EditorComponent::Render() const
 							break;
 						}
 					}
-
 
 					wi::font::Draw(ICON_ARMATURE, fp, cmd);
 				}
@@ -4279,7 +4244,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.emitters.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4289,7 +4254,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4297,7 +4262,6 @@ void EditorComponent::Render() const
 							break;
 						}
 					}
-
 
 					wi::font::Draw(ICON_EMITTER, fp, cmd);
 				}
@@ -4310,7 +4274,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.hairs.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4320,7 +4284,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4328,7 +4292,6 @@ void EditorComponent::Render() const
 							break;
 						}
 					}
-
 
 					wi::font::Draw(ICON_HAIR, fp, cmd);
 				}
@@ -4341,7 +4304,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.sounds.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4351,7 +4314,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4359,7 +4322,6 @@ void EditorComponent::Render() const
 							break;
 						}
 					}
-
 
 					wi::font::Draw(ICON_SOUND, fp, cmd);
 				}
@@ -4371,7 +4333,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.videos.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4381,7 +4343,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4389,7 +4351,6 @@ void EditorComponent::Render() const
 							break;
 						}
 					}
-
 
 					wi::font::Draw(ICON_VIDEO, fp, cmd);
 				}
@@ -4401,7 +4362,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.voxel_grids.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4411,7 +4372,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4434,7 +4395,7 @@ void EditorComponent::Render() const
 					fx.color.y = wi::math::Lerp(fx.color.y * 0.4f, fx.color.y, selectionColorIntensity);
 					fx.color.z = wi::math::Lerp(fx.color.z * 0.4f, fx.color.z, selectionColorIntensity);
 					fx.color.w = 0.6f;
-					//fx.color.w = wi::math::Lerp(fx.color.w * 0.8f, fx.color.w, selectionColorIntensity);
+					// fx.color.w = wi::math::Lerp(fx.color.w * 0.8f, fx.color.w, selectionColorIntensity);
 					wi::image::Draw(&rt_metadataDummies, fx, cmd);
 				}
 
@@ -4443,7 +4404,7 @@ void EditorComponent::Render() const
 					Entity entity = scene.metadatas.GetEntity(i);
 					if (!scene.transforms.Contains(entity))
 						continue;
-					const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+					const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 
 					fp.position = transform.GetPosition();
 					fp.scaling = scaling * wi::math::Distance(transform.GetPosition(), camera.Eye);
@@ -4453,7 +4414,7 @@ void EditorComponent::Render() const
 					{
 						fp.color = hoveredEntityColor;
 					}
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4470,7 +4431,8 @@ void EditorComponent::Render() const
 				static PipelineState pso;
 				if (!pso.IsValid())
 				{
-					static auto LoadShaders = [] {
+					static auto LoadShaders = []
+					{
 						PipelineStateDesc desc;
 						desc.vs = wi::renderer::GetShader(wi::enums::VSTYPE_VERTEXCOLOR);
 						desc.ps = wi::renderer::GetShader(wi::enums::PSTYPE_VERTEXCOLOR);
@@ -4481,7 +4443,8 @@ void EditorComponent::Render() const
 						desc.pt = PrimitiveTopology::TRIANGLELIST;
 						wi::graphics::GetDevice()->CreatePipelineState(&desc, &pso);
 					};
-					static wi::eventhandler::Handle handle = wi::eventhandler::Subscribe(wi::eventhandler::EVENT_RELOAD_SHADERS, [](uint64_t userdata) { LoadShaders(); });
+					static wi::eventhandler::Handle handle = wi::eventhandler::Subscribe(wi::eventhandler::EVENT_RELOAD_SHADERS, [](uint64_t userdata)
+																						 { LoadShaders(); });
 					LoadShaders();
 				}
 
@@ -4497,18 +4460,18 @@ void EditorComponent::Render() const
 					const size_t vb_size = sizeof(Vertex) * (bone_count * (segment_count + 1 + 1));
 					const size_t ib_size = sizeof(uint32_t) * bone_count * (segment_count + 1) * 3;
 					GraphicsDevice::GPUAllocation mem = device->AllocateGPU(vb_size + ib_size, cmd);
-					Vertex* vertices = (Vertex*)mem.data;
-					uint32_t* indices = (uint32_t*)((uint8_t*)mem.data + vb_size);
+					Vertex *vertices = (Vertex *)mem.data;
+					uint32_t *indices = (uint32_t *)((uint8_t *)mem.data + vb_size);
 					uint32_t vertex_count = 0;
 					uint32_t index_count = 0;
 
 					const XMVECTOR Eye = camera.GetEye();
 					const XMVECTOR Unit = XMVectorSet(0, 1, 0, 0);
 
-					for (auto& it : bone_picking_items)
+					for (auto &it : bone_picking_items)
 					{
 						Entity entity = it.first;
-						const Capsule& capsule = it.second;
+						const Capsule &capsule = it.second;
 						XMVECTOR a = XMLoadFloat3(&capsule.base);
 						XMVECTOR b = XMLoadFloat3(&capsule.tip);
 						XMVECTOR ab = XMVector3Normalize(b - a);
@@ -4528,7 +4491,7 @@ void EditorComponent::Render() const
 						{
 							color = hoveredEntityColor;
 						}
-						for (auto& picked : translator.selected)
+						for (auto &picked : translator.selected)
 						{
 							if (picked.entity == entity)
 							{
@@ -4549,7 +4512,7 @@ void EditorComponent::Render() const
 						XMVECTOR A = Base + LineEndOffset;
 						XMVECTOR B = Tip - LineEndOffset;
 						XMVECTOR AB = Unit * XMVector3Length(B - A);
-						XMMATRIX M = { Tangent,Normal,Binormal,XMVectorSetW(A, 1) };
+						XMMATRIX M = {Tangent, Normal, Binormal, XMVectorSetW(A, 1)};
 
 						uint32_t center_vertex_index = vertex_count;
 						Vertex center_vertex;
@@ -4586,15 +4549,15 @@ void EditorComponent::Render() const
 							XMStoreFloat4(&vertex.position, segment_pos);
 							vertex.position.w = 1;
 							vertex.color = color;
-							//vertex.color.w = 0;
+							// vertex.color.w = 0;
 							std::memcpy(vertices + vertex_count, &vertex, sizeof(vertex));
-							uint32_t ind[] = { center_vertex_index,vertex_count - 1,vertex_count };
+							uint32_t ind[] = {center_vertex_index, vertex_count - 1, vertex_count};
 							std::memcpy(indices + index_count, ind, sizeof(ind));
 							index_count += arraysize(ind);
 							vertex_count++;
 						}
 						// closing triangle fan:
-						uint32_t ind[] = { center_vertex_index,vertex_count - 1,center_vertex_index + 1 };
+						uint32_t ind[] = {center_vertex_index, vertex_count - 1, center_vertex_index + 1};
 						std::memcpy(indices + index_count, ind, sizeof(ind));
 						index_count += arraysize(ind);
 					}
@@ -4602,12 +4565,11 @@ void EditorComponent::Render() const
 					device->EventBegin("Bone capsules", cmd);
 					device->BindPipelineState(&pso, cmd);
 
-					const GPUBuffer* vbs[] = {
+					const GPUBuffer *vbs[] = {
 						&mem.buffer,
 					};
 					const uint32_t strides[] = {
-						sizeof(Vertex)
-					};
+						sizeof(Vertex)};
 					const uint64_t offsets[] = {
 						mem.offset,
 					};
@@ -4633,13 +4595,13 @@ void EditorComponent::Render() const
 				for (size_t i = 0; i < scene.names.GetCount(); ++i)
 				{
 					Entity entity = scene.names.GetEntity(i);
-					const TransformComponent* transform = scene.transforms.GetComponent(entity);
+					const TransformComponent *transform = scene.transforms.GetComponent(entity);
 					if (transform != nullptr)
 					{
-						auto& x = debugNameEntitiesSorted.emplace_back();
+						auto &x = debugNameEntitiesSorted.emplace_back();
 						x.name_index = i;
 						x.position = transform->GetPosition();
-						const ObjectComponent* object = scene.objects.GetComponent(entity);
+						const ObjectComponent *object = scene.objects.GetComponent(entity);
 						if (object != nullptr)
 						{
 							x.position = object->center;
@@ -4647,11 +4609,9 @@ void EditorComponent::Render() const
 						x.distance = wi::math::Distance(x.position, camera.Eye);
 					}
 				}
-				std::sort(debugNameEntitiesSorted.begin(), debugNameEntitiesSorted.end(), [](const DebugNameEntitySorter& a, const DebugNameEntitySorter& b)
-					{
-						return a.distance > b.distance;
-					});
-				for (auto& x : debugNameEntitiesSorted)
+				std::sort(debugNameEntitiesSorted.begin(), debugNameEntitiesSorted.end(), [](const DebugNameEntitySorter &a, const DebugNameEntitySorter &b)
+						  { return a.distance > b.distance; });
+				for (auto &x : debugNameEntitiesSorted)
 				{
 					Entity entity = scene.names.GetEntity(x.name_index);
 					wi::font::Params params;
@@ -4659,7 +4619,7 @@ void EditorComponent::Render() const
 					params.size = wi::font::WIFONTSIZE_DEFAULT;
 					params.scaling = 1.0f / params.size * x.distance * 0.03f;
 					params.color = wi::Color::White();
-					for (auto& picked : translator.selected)
+					for (auto &picked : translator.selected)
 					{
 						if (picked.entity == entity)
 						{
@@ -4683,7 +4643,7 @@ void EditorComponent::Render() const
 			{
 				std::string str;
 				str += "Entity: " + std::to_string(hovered.entity);
-				const NameComponent* name = scene.names.GetComponent(hovered.entity);
+				const NameComponent *name = scene.names.GetComponent(hovered.entity);
 				if (name != nullptr)
 				{
 					str += "\nName: " + name->name;
@@ -4743,7 +4703,7 @@ void EditorComponent::Render() const
 			device->RenderPassEnd(cmd);
 		}
 
-		if(!generalWnd.focusModeCheckBox.GetCheck() && themeEditorWnd.waveColor.getA() > 0)
+		if (!generalWnd.focusModeCheckBox.GetCheck() && themeEditorWnd.waveColor.getA() > 0)
 		{
 			device->EventBegin("Background wave effect", cmd);
 			device->RenderPassBegin(&gui_background_effect, cmd);
@@ -4767,7 +4727,6 @@ void EditorComponent::Render() const
 	}
 
 	RenderPath2D::Render();
-
 }
 void EditorComponent::Compose(CommandList cmd) const
 {
@@ -4878,7 +4837,7 @@ void EditorComponent::ResizeViewport3D()
 		viewport3D.width = (float)renderPath->width;
 		viewport3D.height = (float)renderPath->height;
 
-		GraphicsDevice* device = wi::graphics::GetDevice();
+		GraphicsDevice *device = wi::graphics::GetDevice();
 
 		XMUINT2 internalResolution = renderPath->GetInternalResolution();
 
@@ -4909,7 +4868,7 @@ void EditorComponent::ResizeViewport3D()
 			assert(success);
 		}
 
-		const TextureDesc& renderResultDesc = renderPath->GetRenderResult().GetDesc();
+		const TextureDesc &renderResultDesc = renderPath->GetRenderResult().GetDesc();
 		{
 			TextureDesc desc;
 			desc.width = renderResultDesc.width;
@@ -4984,8 +4943,7 @@ void EditorComponent::ResizeViewport3D()
 
 	viewport3D_hitbox = Hitbox2D(
 		XMFLOAT2(PhysicalToLogical(uint32_t(viewport3D.top_left_x)), PhysicalToLogical(uint32_t(viewport3D.top_left_y))),
-		XMFLOAT2(PhysicalToLogical(uint32_t(viewport3D.width)), PhysicalToLogical(uint32_t(viewport3D.height)))
-	);
+		XMFLOAT2(PhysicalToLogical(uint32_t(viewport3D.width)), PhysicalToLogical(uint32_t(viewport3D.height))));
 }
 
 void EditorComponent::ClearSelected()
@@ -4998,14 +4956,14 @@ void EditorComponent::AddSelected(Entity entity, bool allow_refocus)
 	res.entity = entity;
 	AddSelected(res, allow_refocus);
 }
-void EditorComponent::AddSelected(const PickResult& picked, bool allow_refocus)
+void EditorComponent::AddSelected(const PickResult &picked, bool allow_refocus)
 {
-	wi::scene::Scene& scene = GetCurrentScene();
+	wi::scene::Scene &scene = GetCurrentScene();
 
 	bool removal = false;
 	for (size_t i = 0; i < translator.selected.size(); ++i)
 	{
-		if(translator.selected[i] == picked)
+		if (translator.selected[i] == picked)
 		{
 			// If already selected, it will be deselected now:
 			translator.selected[i] = translator.selected.back();
@@ -5026,7 +4984,7 @@ void EditorComponent::AddSelected(const PickResult& picked, bool allow_refocus)
 }
 bool EditorComponent::IsSelected(Entity entity) const
 {
-	for (auto& x : translator.selected)
+	for (auto &x : translator.selected)
 	{
 		if (x.entity == entity)
 		{
@@ -5036,10 +4994,10 @@ bool EditorComponent::IsSelected(Entity entity) const
 	return false;
 }
 
-void EditorComponent::RecordSelection(wi::Archive& archive) const
+void EditorComponent::RecordSelection(wi::Archive &archive) const
 {
 	archive << translator.selected.size();
-	for (auto& x : translator.selected)
+	for (auto &x : translator.selected)
 	{
 		archive << x.entity;
 		archive << x.position;
@@ -5048,18 +5006,18 @@ void EditorComponent::RecordSelection(wi::Archive& archive) const
 		archive << x.distance;
 	}
 }
-void EditorComponent::RecordEntity(wi::Archive& archive, wi::ecs::Entity entity)
+void EditorComponent::RecordEntity(wi::Archive &archive, wi::ecs::Entity entity)
 {
-	const wi::vector<Entity> entities = { entity };
+	const wi::vector<Entity> entities = {entity};
 	RecordEntity(archive, entities);
 }
-void EditorComponent::RecordEntity(wi::Archive& archive, const wi::vector<wi::ecs::Entity>& entities)
+void EditorComponent::RecordEntity(wi::Archive &archive, const wi::vector<wi::ecs::Entity> &entities)
 {
-	Scene& scene = GetCurrentScene();
+	Scene &scene = GetCurrentScene();
 	EntitySerializer seri;
 
 	archive << entities;
-	for (auto& x : entities)
+	for (auto &x : entities)
 	{
 		scene.Entity_Serialize(archive, seri, x);
 	}
@@ -5067,14 +5025,14 @@ void EditorComponent::RecordEntity(wi::Archive& archive, const wi::vector<wi::ec
 
 void EditorComponent::ResetHistory()
 {
-	EditorScene& editorscene = GetCurrentEditorScene();
+	EditorScene &editorscene = GetCurrentEditorScene();
 	editorscene.historyPos = -1;
 	editorscene.history.clear();
 	editorscene.has_unsaved_changes = false;
 }
-wi::Archive& EditorComponent::AdvanceHistory(const bool scene_unchanged)
+wi::Archive &EditorComponent::AdvanceHistory(const bool scene_unchanged)
 {
-	EditorScene& editorscene = GetCurrentEditorScene();
+	EditorScene &editorscene = GetCurrentEditorScene();
 	editorscene.historyPos++;
 
 	while (static_cast<int>(editorscene.history.size()) > editorscene.historyPos)
@@ -5095,7 +5053,7 @@ wi::Archive& EditorComponent::AdvanceHistory(const bool scene_unchanged)
 }
 void EditorComponent::ConsumeHistoryOperation(bool undo)
 {
-	EditorScene& editorscene = GetCurrentEditorScene();
+	EditorScene &editorscene = GetCurrentEditorScene();
 
 	if ((undo && editorscene.historyPos >= 0) || (!undo && editorscene.historyPos < (int)editorscene.history.size() - 1))
 	{
@@ -5104,9 +5062,9 @@ void EditorComponent::ConsumeHistoryOperation(bool undo)
 			editorscene.historyPos++;
 		}
 
-		Scene& scene = GetCurrentScene();
+		Scene &scene = GetCurrentScene();
 
-		wi::Archive& archive = editorscene.history[editorscene.historyPos];
+		wi::Archive &archive = editorscene.history[editorscene.historyPos];
 		archive.SetReadModeAndResetPos(true);
 
 		int temp;
@@ -5116,36 +5074,36 @@ void EditorComponent::ConsumeHistoryOperation(bool undo)
 		switch (type)
 		{
 		case HISTORYOP_TRANSLATOR:
+		{
+			archive >> translator.isTranslator;
+			archive >> translator.isRotator;
+			archive >> translator.isScalator;
+
+			EntitySerializer seri;
+			wi::scene::TransformComponent start;
+			wi::scene::TransformComponent end;
+			start.Serialize(archive, seri);
+			end.Serialize(archive, seri);
+			wi::vector<XMFLOAT4X4> matrices_start;
+			wi::vector<XMFLOAT4X4> matrices_end;
+			archive >> matrices_start;
+			archive >> matrices_end;
+
+			translator.PreTranslate();
+			if (undo)
 			{
-				archive >> translator.isTranslator;
-				archive >> translator.isRotator;
-				archive >> translator.isScalator;
-
-				EntitySerializer seri;
-				wi::scene::TransformComponent start;
-				wi::scene::TransformComponent end;
-				start.Serialize(archive, seri);
-				end.Serialize(archive, seri);
-				wi::vector<XMFLOAT4X4> matrices_start;
-				wi::vector<XMFLOAT4X4> matrices_end;
-				archive >> matrices_start;
-				archive >> matrices_end;
-
-				translator.PreTranslate();
-				if (undo)
-				{
-					translator.transform = start;
-					translator.matrices_current = matrices_start;
-				}
-				else
-				{
-					translator.transform = end;
-					translator.matrices_current = matrices_end;
-				}
-				translator.transform.UpdateTransform();
-				translator.PostTranslate();
+				translator.transform = start;
+				translator.matrices_current = matrices_start;
 			}
-			break;
+			else
+			{
+				translator.transform = end;
+				translator.matrices_current = matrices_end;
+			}
+			translator.transform.UpdateTransform();
+			translator.PostTranslate();
+		}
+		break;
 		case HISTORYOP_SELECTION:
 		{
 			// Read selections states from archive:
@@ -5234,7 +5192,7 @@ void EditorComponent::ConsumeHistoryOperation(bool undo)
 				seri.allow_remap = false;
 				for (size_t i = 0; i < modifiedSplineEntities.size(); ++i)
 				{
-					scene.Entity_Remove(modifiedSplineEntities[i], false); // no recursive!!!
+					scene.Entity_Remove(modifiedSplineEntities[i], false);																			// no recursive!!!
 					scene.Entity_Serialize(archive, seri, INVALID_ENTITY, wi::scene::Scene::EntitySerializeFlags::KEEP_INTERNAL_ENTITY_REFERENCES); // no recursive!!!
 				}
 			}
@@ -5261,91 +5219,89 @@ void EditorComponent::ConsumeHistoryOperation(bool undo)
 					scene.Entity_Serialize(archive, seri);
 				}
 			}
-
 		}
 		break;
 		case HISTORYOP_DELETE:
+		{
+			// Read selections states from archive:
+
+			wi::vector<wi::scene::PickResult> selectedBEFORE;
+			size_t selectionCountBEFORE;
+			archive >> selectionCountBEFORE;
+			for (size_t i = 0; i < selectionCountBEFORE; ++i)
 			{
-				// Read selections states from archive:
+				wi::scene::PickResult sel;
+				archive >> sel.entity;
+				archive >> sel.position;
+				archive >> sel.normal;
+				archive >> sel.subsetIndex;
+				archive >> sel.distance;
 
-				wi::vector<wi::scene::PickResult> selectedBEFORE;
-				size_t selectionCountBEFORE;
-				archive >> selectionCountBEFORE;
-				for (size_t i = 0; i < selectionCountBEFORE; ++i)
-				{
-					wi::scene::PickResult sel;
-					archive >> sel.entity;
-					archive >> sel.position;
-					archive >> sel.normal;
-					archive >> sel.subsetIndex;
-					archive >> sel.distance;
-
-					selectedBEFORE.push_back(sel);
-				}
-
-				wi::vector<Entity> deletedEntities;
-				archive >> deletedEntities;
-
-				ClearSelected();
-				if (undo)
-				{
-					translator.selected = selectedBEFORE;
-					EntitySerializer seri;
-					seri.allow_remap = false;
-					for (size_t i = 0; i < deletedEntities.size(); ++i)
-					{
-						scene.Entity_Serialize(archive, seri);
-					}
-				}
-				else
-				{
-					for (size_t i = 0; i < deletedEntities.size(); ++i)
-					{
-						scene.Entity_Remove(deletedEntities[i]);
-					}
-				}
-
+				selectedBEFORE.push_back(sel);
 			}
-			break;
+
+			wi::vector<Entity> deletedEntities;
+			archive >> deletedEntities;
+
+			ClearSelected();
+			if (undo)
+			{
+				translator.selected = selectedBEFORE;
+				EntitySerializer seri;
+				seri.allow_remap = false;
+				for (size_t i = 0; i < deletedEntities.size(); ++i)
+				{
+					scene.Entity_Serialize(archive, seri);
+				}
+			}
+			else
+			{
+				for (size_t i = 0; i < deletedEntities.size(); ++i)
+				{
+					scene.Entity_Remove(deletedEntities[i]);
+				}
+			}
+		}
+		break;
 		case HISTORYOP_COMPONENT_DATA:
+		{
+			Scene before, after;
+			wi::vector<Entity> entities_before, entities_after;
+
+			archive >> entities_before;
+			for (auto &x : entities_before)
 			{
-				Scene before, after;
-				wi::vector<Entity> entities_before, entities_after;
-
-				archive >> entities_before;
-				for (auto& x : entities_before)
-				{
-					EntitySerializer seri;
-					seri.allow_remap = false;
-					before.Entity_Serialize(archive, seri);
-				}
-
-				archive >> entities_after;
-				for (auto& x : entities_after)
-				{
-					EntitySerializer seri;
-					seri.allow_remap = false;
-					after.Entity_Serialize(archive, seri);
-				}
-
-				if (undo)
-				{
-					for (auto& x : entities_before)
-					{
-						scene.Entity_Remove(x);
-					}
-					scene.Merge(before);
-				}
-				else
-				{
-					for (auto& x : entities_after)
-					{
-						scene.Entity_Remove(x);
-					}
-					scene.Merge(after);
-				}
+				EntitySerializer seri;
+				seri.allow_remap = false;
+				before.Entity_Serialize(archive, seri);
 			}
-			break;
+
+			archive >> entities_after;
+			for (auto &x : entities_after)
+			{
+				EntitySerializer seri;
+				seri.allow_remap = false;
+				after.Entity_Serialize(archive, seri);
+			}
+
+			if (undo)
+			{
+				for (auto &x : entities_before)
+				{
+					scene.Entity_Remove(x);
+				}
+				scene.Merge(before);
+			}
+			else
+			{
+				for (auto &x : entities_after)
+				{
+					scene.Entity_Remove(x);
+				}
+				scene.Merge(after);
+			}
+		}
+		break;
 		case HISTORYOP_PAINTTOOL:
 			paintToolWnd.ConsumeHistoryOperation(archive, undo);
 			break;
@@ -5386,7 +5342,7 @@ void EditorComponent::RegisterRecentlyUsed(std::string filename)
 			recentFilenames.erase(recentFilenames.begin());
 		}
 		recentFilenames.push_back(filename);
-		auto& recent = main->config.GetSection("recent");
+		auto &recent = main->config.GetSection("recent");
 		for (size_t i = 0; i < recentFilenames.size(); ++i)
 		{
 			recent.Set(std::to_string(i).c_str(), recentFilenames[i]);
@@ -5410,7 +5366,7 @@ void EditorComponent::RegisterRecentlyUsed(std::string filename)
 			recentFolders.erase(recentFolders.begin());
 		}
 		recentFolders.push_back(folder);
-		auto& recent = main->config.GetSection("recent_folders");
+		auto &recent = main->config.GetSection("recent_folders");
 		for (size_t i = 0; i < recentFolders.size(); ++i)
 		{
 			recent.Set(std::to_string(i).c_str(), recentFolders[i]);
@@ -5461,7 +5417,7 @@ void EditorComponent::Open(std::string filename)
 	if (type == FileType::TEXT)
 	{
 		Entity entity = CreateEntity();
-		wi::SpriteFont& font = GetCurrentScene().fonts.Create(entity);
+		wi::SpriteFont &font = GetCurrentScene().fonts.Create(entity);
 		font.params.h_align = wi::font::Alignment::WIFALIGN_CENTER;
 		font.params.v_align = wi::font::Alignment::WIFALIGN_CENTER;
 		font.params.scaling = 0.1f;
@@ -5482,13 +5438,13 @@ void EditorComponent::Open(std::string filename)
 	}
 	if (type == FileType::IMAGE)
 	{
-		Scene& scene = GetCurrentScene();
+		Scene &scene = GetCurrentScene();
 		Entity entity = CreateEntity();
-		wi::Sprite& sprite = scene.sprites.Create(entity);
+		wi::Sprite &sprite = scene.sprites.Create(entity);
 		sprite = wi::Sprite(filename);
 		if (sprite.textureResource.IsValid())
 		{
-			const TextureDesc& desc = sprite.textureResource.GetTexture().GetDesc();
+			const TextureDesc &desc = sprite.textureResource.GetTexture().GetDesc();
 			sprite.params.siz = XMFLOAT2(1, float(desc.height) / float(desc.width));
 		}
 		else
@@ -5509,7 +5465,8 @@ void EditorComponent::Open(std::string filename)
 	// even if the user switches tabs during async loading
 	const uint64_t target_scene_id = GetCurrentEditorScene().id;
 
-	wi::jobsystem::Execute(loadmodel_workload, [=] (wi::jobsystem::JobArgs) {
+	wi::jobsystem::Execute(loadmodel_workload, [=](wi::jobsystem::JobArgs)
+						   {
 		wi::backlog::post("[Editor] started loading model: " + filename);
 		wi::allocator::shared_ptr<Scene> scene = wi::allocator::make_shared_single<Scene>();
 		if (type == FileType::WISCENE)
@@ -5630,14 +5587,14 @@ void EditorComponent::Open(std::string filename)
 				RefreshSceneList();
 
 				wi::backlog::post("[Editor] finished loading model: " + filename);
-			});
-		});
-	}
-void EditorComponent::Save(const std::string& filename)
+			}); });
+}
+void EditorComponent::Save(const std::string &filename)
 {
-	struct SetAndClearFlagOnExit {
-		bool& flag;
-		SetAndClearFlagOnExit(bool& flag) : flag(flag) { flag = true; }
+	struct SetAndClearFlagOnExit
+	{
+		bool &flag;
+		SetAndClearFlagOnExit(bool &flag) : flag(flag) { flag = true; }
 		~SetAndClearFlagOnExit() { flag = false; }
 	} scoped(save_in_progress);
 
@@ -5669,7 +5626,7 @@ void EditorComponent::Save(const std::string& filename)
 			{
 				archive.SetCompressionEnabled(generalWnd.saveCompressionCheckBox.GetCheck());
 
-				Scene& currentScene = GetCurrentScene();
+				Scene &currentScene = GetCurrentScene();
 				currentScene.Update(0);
 
 				// Create dedicated thumbnail renderpath with fixed dimensions
@@ -5701,7 +5658,7 @@ void EditorComponent::Save(const std::string& filename)
 				archive.SetThumbnailAndResetPos(thumbnailScreenshot);
 			}
 
-			Scene& scene = GetCurrentScene();
+			Scene &scene = GetCurrentScene();
 
 			wi::resourcemanager::Mode embed_mode = (wi::resourcemanager::Mode)generalWnd.saveModeComboBox.GetItemUserData(generalWnd.saveModeComboBox.GetSelected());
 			wi::resourcemanager::SetMode(embed_mode);
@@ -5751,18 +5708,18 @@ void EditorComponent::SaveAs()
 	params.extensions.push_back("glb");
 	params.extensions.push_back("h");
 	params.extensions.push_back("cpp");
-	wi::helper::FileDialog(params, [=](const std::string& fileName) {
-		wi::eventhandler::Subscribe_Once(wi::eventhandler::EVENT_THREAD_SAFE_POINT, [=](uint64_t userdata) {
+	wi::helper::FileDialog(params, [=](const std::string &fileName)
+						   { wi::eventhandler::Subscribe_Once(wi::eventhandler::EVENT_THREAD_SAFE_POINT, [=](uint64_t userdata)
+															  {
 			auto extension = wi::helper::toUpper(wi::helper::GetExtensionFromFileName(fileName));
 			std::string filename = (!extension.compare("GLTF") || !extension.compare("GLB") || !extension.compare("H") || !extension.compare("CPP")) ? fileName : wi::helper::ForceExtension(fileName, params.extensions.front());
-			Save(filename);
-		});
-	}, [this]() { save_in_progress = false; });
+			Save(filename); }); }, [this]()
+						   { save_in_progress = false; });
 }
 
 Texture EditorComponent::CreateThumbnail(Texture texture, uint32_t target_width, uint32_t target_height, bool mipmaps) const
 {
-	GraphicsDevice* device = GetDevice();
+	GraphicsDevice *device = GetDevice();
 	CommandList cmd = device->BeginCommandList();
 	Texture thumbnail = texture;
 
@@ -5788,7 +5745,7 @@ Texture EditorComponent::CreateThumbnail(Texture texture, uint32_t target_width,
 		desc.format = Format::R8G8B8A8_UNORM;
 		desc.width = current_width;
 		desc.height = current_height;
-		desc.mip_levels = mipmaps? 0 : 1;
+		desc.mip_levels = mipmaps ? 0 : 1;
 		desc.bind_flags = BindFlag::SHADER_RESOURCE | BindFlag::RENDER_TARGET | BindFlag::UNORDERED_ACCESS;
 		Texture upsized;
 		device->CreateTexture(&desc, nullptr, &upsized);
@@ -5865,9 +5822,9 @@ Texture EditorComponent::CreateThumbnail(Texture texture, uint32_t target_width,
 	return thumbnail;
 }
 
-bool EditorComponent::SetupThumbnailCamera(wi::RenderPath3D& thumbnailRenderPath)
+bool EditorComponent::SetupThumbnailCamera(wi::RenderPath3D &thumbnailRenderPath)
 {
-	Scene& scene = GetCurrentScene();
+	Scene &scene = GetCurrentScene();
 
 	// Check if scene has exactly one root entity
 	wi::unordered_set<Entity> all_entities;
@@ -5876,7 +5833,7 @@ bool EditorComponent::SetupThumbnailCamera(wi::RenderPath3D& thumbnailRenderPath
 	Entity root_entity = INVALID_ENTITY;
 	for (Entity entity : all_entities)
 	{
-		const HierarchyComponent* hierarchy_component = scene.hierarchy.GetComponent(entity);
+		const HierarchyComponent *hierarchy_component = scene.hierarchy.GetComponent(entity);
 		if (hierarchy_component == nullptr || hierarchy_component->parentID == INVALID_ENTITY)
 		{
 			if (root_entity != INVALID_ENTITY)
@@ -5893,12 +5850,13 @@ bool EditorComponent::SetupThumbnailCamera(wi::RenderPath3D& thumbnailRenderPath
 	AABB combined_bounds;
 	bool has_bounds = false;
 
-	auto add_entity_bounds = [&](const Entity entity) {
-		const ObjectComponent* object = scene.objects.GetComponent(entity);
+	auto add_entity_bounds = [&](const Entity entity)
+	{
+		const ObjectComponent *object = scene.objects.GetComponent(entity);
 		if (object != nullptr && object->IsRenderable() && object->meshID != INVALID_ENTITY)
 		{
-			const MeshComponent* mesh = scene.meshes.GetComponent(object->meshID);
-			const TransformComponent* transform = scene.transforms.GetComponent(entity);
+			const MeshComponent *mesh = scene.meshes.GetComponent(object->meshID);
+			const TransformComponent *transform = scene.transforms.GetComponent(entity);
 			if (mesh != nullptr && transform != nullptr && mesh->aabb.IsValid())
 			{
 				const XMMATRIX world_transform = XMLoadFloat4x4(&transform->world);
@@ -5911,9 +5869,8 @@ bool EditorComponent::SetupThumbnailCamera(wi::RenderPath3D& thumbnailRenderPath
 
 	add_entity_bounds(root_entity);
 
-	scene.ForEachChild(root_entity, [&](const Entity child) {
-		add_entity_bounds(child);
-	});
+	scene.ForEachChild(root_entity, [&](const Entity child)
+					   { add_entity_bounds(child); });
 
 	// Only adjust camera if we have valid bounds
 	if (!has_bounds || combined_bounds.getArea() <= 0)
@@ -5932,8 +5889,7 @@ bool EditorComponent::SetupThumbnailCamera(wi::RenderPath3D& thumbnailRenderPath
 	auto camera_position = XMFLOAT3(
 		bounds_center.x + horizontal_distance * std::cos(horizontal_angle),
 		bounds_center.y + vertical_offset,
-		bounds_center.z + horizontal_distance * std::sin(horizontal_angle)
-	);
+		bounds_center.z + horizontal_distance * std::sin(horizontal_angle));
 
 	TransformComponent temp_camera_transform;
 	temp_camera_transform.Translate(XMLoadFloat3(&camera_position));
@@ -5960,7 +5916,7 @@ bool EditorComponent::SetupThumbnailCamera(wi::RenderPath3D& thumbnailRenderPath
 	return true;
 }
 
-void EditorComponent::PostSaveText(const std::string& message, const std::string& filename, float time_seconds)
+void EditorComponent::PostSaveText(const std::string &message, const std::string &filename, float time_seconds)
 {
 	save_text_message = message;
 	save_text_filename = filename;
@@ -5970,7 +5926,7 @@ void EditorComponent::PostSaveText(const std::string& message, const std::string
 
 void EditorComponent::CheckBonePickingEnabled()
 {
-	const Scene& scene = GetCurrentScene();
+	const Scene &scene = GetCurrentScene();
 
 	if (generalWnd.bonePickerOpacitySlider.GetValue() <= 0.0f)
 	{
@@ -5991,7 +5947,7 @@ void EditorComponent::CheckBonePickingEnabled()
 		for (size_t i = 0; i < scene.humanoids.GetCount() && !bone_picking; ++i)
 		{
 			Entity entity = scene.humanoids.GetEntity(i);
-			for (auto& x : translator.selected)
+			for (auto &x : translator.selected)
 			{
 				if (entity == x.entity)
 				{
@@ -6001,7 +5957,7 @@ void EditorComponent::CheckBonePickingEnabled()
 			}
 			for (Entity bone : scene.humanoids[i].bones)
 			{
-				for (auto& x : translator.selected)
+				for (auto &x : translator.selected)
 				{
 					if (bone == x.entity)
 					{
@@ -6014,7 +5970,7 @@ void EditorComponent::CheckBonePickingEnabled()
 		for (size_t i = 0; i < scene.armatures.GetCount() && !bone_picking; ++i)
 		{
 			Entity entity = scene.armatures.GetEntity(i);
-			for (auto& x : translator.selected)
+			for (auto &x : translator.selected)
 			{
 				if (entity == x.entity)
 				{
@@ -6024,7 +5980,7 @@ void EditorComponent::CheckBonePickingEnabled()
 			}
 			for (Entity bone : scene.armatures[i].boneCollection)
 			{
-				for (auto& x : translator.selected)
+				for (auto &x : translator.selected)
 				{
 					if (bone == x.entity)
 					{
@@ -6040,7 +5996,8 @@ void EditorComponent::CheckBonePickingEnabled()
 		return;
 
 	bone_picking_items.clear();
-	auto bone_pick_iterate = [&](const Entity* entities, size_t entity_count) {
+	auto bone_pick_iterate = [&](const Entity *entities, size_t entity_count)
+	{
 		for (size_t i = 0; i < entity_count; ++i)
 		{
 			Entity entity = entities[i];
@@ -6050,10 +6007,10 @@ void EditorComponent::CheckBonePickingEnabled()
 				continue;
 			if (!scene.transforms.Contains(entity))
 				continue;
-			const TransformComponent& transform = *scene.transforms.GetComponent(entity);
+			const TransformComponent &transform = *scene.transforms.GetComponent(entity);
 			XMVECTOR a = transform.GetPositionV();
 			XMVECTOR b = a + XMVectorSet(0, 0.1f, 0, 0);
-			const SpringComponent* spring = scene.springs.GetComponent(entity);
+			const SpringComponent *spring = scene.springs.GetComponent(entity);
 			if (spring != nullptr)
 			{
 				// Spring has information about bone tip already:
@@ -6065,11 +6022,11 @@ void EditorComponent::CheckBonePickingEnabled()
 				bool child_found = false;
 				for (size_t h = 0; (h < scene.humanoids.GetCount()) && !child_found; ++h)
 				{
-					const HumanoidComponent& humanoid = scene.humanoids[h];
+					const HumanoidComponent &humanoid = scene.humanoids[h];
 					int bodypart = 0;
 					for (Entity child : humanoid.bones)
 					{
-						const HierarchyComponent* hierarchy = scene.hierarchy.GetComponent(child);
+						const HierarchyComponent *hierarchy = scene.hierarchy.GetComponent(child);
 						if (hierarchy != nullptr && hierarchy->parentID == entity && scene.transforms.Contains(child))
 						{
 							if (bodypart == int(HumanoidComponent::HumanoidBone::Hips))
@@ -6078,7 +6035,7 @@ void EditorComponent::CheckBonePickingEnabled()
 								child_found = true;
 								break;
 							}
-							const TransformComponent& child_transform = *scene.transforms.GetComponent(child);
+							const TransformComponent &child_transform = *scene.transforms.GetComponent(child);
 							b = child_transform.GetPositionV();
 							child_found = true;
 							break;
@@ -6091,10 +6048,10 @@ void EditorComponent::CheckBonePickingEnabled()
 					for (size_t j = 0; j < entity_count; ++j)
 					{
 						Entity child = entities[j];
-						const HierarchyComponent* hierarchy = scene.hierarchy.GetComponent(child);
+						const HierarchyComponent *hierarchy = scene.hierarchy.GetComponent(child);
 						if (hierarchy != nullptr && hierarchy->parentID == entity && scene.transforms.Contains(child))
 						{
-							const TransformComponent& child_transform = *scene.transforms.GetComponent(child);
+							const TransformComponent &child_transform = *scene.transforms.GetComponent(child);
 							b = child_transform.GetPositionV();
 							child_found = true;
 							break;
@@ -6104,10 +6061,10 @@ void EditorComponent::CheckBonePickingEnabled()
 				if (!child_found)
 				{
 					// No child, try to guess bone tip compared to parent (if it has parent):
-					const HierarchyComponent* hierarchy = scene.hierarchy.GetComponent(entity);
+					const HierarchyComponent *hierarchy = scene.hierarchy.GetComponent(entity);
 					if (hierarchy != nullptr && scene.transforms.Contains(hierarchy->parentID))
 					{
-						const TransformComponent& parent_transform = *scene.transforms.GetComponent(hierarchy->parentID);
+						const TransformComponent &parent_transform = *scene.transforms.GetComponent(hierarchy->parentID);
 						XMVECTOR ab = a - parent_transform.GetPositionV();
 						b = a + ab;
 					}
@@ -6127,12 +6084,12 @@ void EditorComponent::CheckBonePickingEnabled()
 	};
 	for (size_t i = 0; i < scene.humanoids.GetCount(); ++i)
 	{
-		const HumanoidComponent& humanoid = scene.humanoids[i];
+		const HumanoidComponent &humanoid = scene.humanoids[i];
 		bone_pick_iterate(humanoid.bones, arraysize(humanoid.bones));
 	}
 	for (size_t i = 0; i < scene.armatures.GetCount(); ++i)
 	{
-		const ArmatureComponent& armature = scene.armatures[i];
+		const ArmatureComponent &armature = scene.armatures[i];
 		bone_pick_iterate(armature.boneCollection.data(), armature.boneCollection.size());
 	}
 }
@@ -6196,7 +6153,6 @@ void EditorComponent::UpdateDynamicWidgets()
 	{
 		contentBrowserButton.SetText(contentBrowserButton.GetState() > wi::gui::WIDGETSTATE::IDLE ? ICON_CONTENT_BROWSER " Content" : ICON_CONTENT_BROWSER);
 	}
-
 
 	if (logButton.GetState() > wi::gui::WIDGETSTATE::IDLE && current_localization.Get((size_t)EditorLocalization::Backlog) != nullptr)
 	{
@@ -6303,7 +6259,6 @@ void EditorComponent::UpdateDynamicWidgets()
 	openButton.SetPos(XMFLOAT2(contentBrowserButton.GetPos().x - openButton.GetSize().x - padding, y));
 	saveButton.SetPos(XMFLOAT2(openButton.GetPos().x - saveButton.GetSize().x - padding, y));
 
-
 	float static_pos = screenW - wid_idle * 12;
 
 	projectCreatorButton.SetSize(XMFLOAT2(wid_idle * 0.75f, hei));
@@ -6318,7 +6273,7 @@ void EditorComponent::UpdateDynamicWidgets()
 	float mid = 0;
 	for (int i = 0; i < int(scenes.size()); ++i)
 	{
-		auto& editorscene = scenes[i];
+		auto &editorscene = scenes[i];
 		editorscene->tabSelectButton.SetShadowRadius(topmenuWnd.GetShadowRadius());
 		editorscene->tabCloseButton.SetShadowRadius(topmenuWnd.GetShadowRadius());
 		editorscene->tabSelectButton.SetSize(XMFLOAT2(wid_idle, hei));
@@ -6384,14 +6339,12 @@ void EditorComponent::UpdateDynamicWidgets()
 	cinemaButton.Update(*this, 0);
 	y += cinemaButton.GetSize().y + padding;
 
-
 	newEntityCombo.SetSize(XMFLOAT2(hei * 1.4f, hei * 1.4f));
 	ofs -= padding * 2 + newEntityCombo.GetSize().x;
 	y = topmenuWnd.GetSize().y + padding;
 	newEntityCombo.SetPos(XMFLOAT2(ofs, y));
 	newEntityCombo.Update(*this, 0);
 	newEntityCombo.SetText(""); // override localization
-
 
 	XMFLOAT4 color_on = playButton.sprites[wi::gui::FOCUS].params.color;
 	XMFLOAT4 color_off = playButton.sprites[wi::gui::IDLE].params.color;
@@ -6442,12 +6395,10 @@ void EditorComponent::UpdateDynamicWidgets()
 		physicsButton.sprites[wi::gui::IDLE].params.color = color_off;
 	}
 
-
-
 	if (wi::backlog::GetUnseenLogLevelMax() >= wi::backlog::LogLevel::Error)
 	{
 		const float pulse = std::sin(outlineTimer * XM_2PI * 1.5f) * 0.5f + 0.5f;
-		const XMFLOAT4 alertColor = wi::math::Lerp( wi::Color::Error(), XMFLOAT4(0, 0, 0, 1), pulse * 0.6f);
+		const XMFLOAT4 alertColor = wi::math::Lerp(wi::Color::Error(), XMFLOAT4(0, 0, 0, 1), pulse * 0.6f);
 		logButton.sprites[wi::gui::IDLE].params.color = alertColor;
 		logButton.sprites[wi::gui::IDLE].params.gradient = wi::image::Params::Gradient::None;
 		logButton.sprites[wi::gui::FOCUS].params.color = alertColor;
@@ -6469,8 +6420,6 @@ void EditorComponent::UpdateDynamicWidgets()
 		logButton.sprites[wi::gui::FOCUS].params.color = color_on;
 		logButton.sprites[wi::gui::FOCUS].params.gradient = wi::image::Params::Gradient::None;
 	}
-
-
 
 	ofs = padding;
 	if (generalWnd.IsVisible())
@@ -6556,7 +6505,6 @@ void EditorComponent::UpdateDynamicWidgets()
 	paintToolButton.Update(*this, 0);
 	y += hei + padding;
 
-
 	guiScalingCombo.SetSize(XMFLOAT2(50, 18));
 	guiScalingCombo.SetPos(XMFLOAT2(ofs, screenH - guiScalingCombo.GetSize().y - padding));
 }
@@ -6571,7 +6519,7 @@ void EditorComponent::SetCurrentScene(int index)
 	componentsWnd.RefreshEntityTree();
 	RefreshSceneList();
 
-	EditorScene& editorscene = GetCurrentEditorScene();
+	EditorScene &editorscene = GetCurrentEditorScene();
 	if (editorscene.path.empty() && !editorscene.untitled_camera_reset_once)
 	{
 		cameraWnd.ResetCam();
@@ -6583,7 +6531,7 @@ void EditorComponent::RefreshSceneList()
 	generalWnd.RefreshTheme();
 	for (int i = 0; i < int(scenes.size()); ++i)
 	{
-		auto& editorscene = scenes[i];
+		auto &editorscene = scenes[i];
 		std::string tabText;
 		if (editorscene->path.empty())
 		{
@@ -6610,10 +6558,10 @@ void EditorComponent::RefreshSceneList()
 
 		editorscene->tabSelectButton.SetText(tabText);
 
-		editorscene->tabSelectButton.OnClick([this, i](wi::gui::EventArgs args) {
-			SetCurrentScene(i);
-			});
-		editorscene->tabCloseButton.OnClick([this, i](wi::gui::EventArgs args) {
+		editorscene->tabSelectButton.OnClick([this, i](wi::gui::EventArgs args)
+											 { SetCurrentScene(i); });
+		editorscene->tabCloseButton.OnClick([this, i](wi::gui::EventArgs args)
+											{
 			// Check for unsaved changes before closing
 			if (!CheckUnsavedChanges(i))
 			{
@@ -6674,15 +6622,14 @@ void EditorComponent::RefreshSceneList()
 					scenes.erase(scenes.begin() + i);
 				}
 				SetCurrentScene(std::max(0, i - 1));
-			});
-		});
+			}); });
 	}
 }
 void EditorComponent::NewScene()
 {
 	int scene_id = int(scenes.size());
 	scenes.push_back(std::make_unique<EditorScene>());
-	auto& editorscene = scenes.back();
+	auto &editorscene = scenes.back();
 	editorscene->id = next_scene_id++;
 	editorscene->tabSelectButton.Create("");
 	editorscene->tabSelectButton.SetLocalizationEnabled(false);
@@ -6697,9 +6644,9 @@ void EditorComponent::NewScene()
 	cameraWnd.ResetCam();
 }
 
-EditorComponent::EditorScene* EditorComponent::FindEditorSceneByID(uint64_t id) const
+EditorComponent::EditorScene *EditorComponent::FindEditorSceneByID(uint64_t id) const
 {
-	for (auto& scene : scenes)
+	for (auto &scene : scenes)
 	{
 		if (scene->id == id)
 		{
@@ -6709,9 +6656,9 @@ EditorComponent::EditorScene* EditorComponent::FindEditorSceneByID(uint64_t id) 
 	return nullptr;
 }
 
-EditorComponent::EditorScene& EditorComponent::GetOrCreateEditorSceneForLoading(uint64_t target_scene_id)
+EditorComponent::EditorScene &EditorComponent::GetOrCreateEditorSceneForLoading(uint64_t target_scene_id)
 {
-	EditorScene* target = FindEditorSceneByID(target_scene_id);
+	EditorScene *target = FindEditorSceneByID(target_scene_id);
 	if (target != nullptr)
 	{
 		return *target;
@@ -6728,7 +6675,7 @@ bool EditorComponent::CheckUnsavedChanges(int scene_index)
 	if (scene_index < 0 || scene_index >= (int)scenes.size())
 		return true;
 
-	EditorScene& editorscene = *scenes[scene_index];
+	EditorScene &editorscene = *scenes[scene_index];
 	if (!editorscene.has_unsaved_changes)
 		return true;
 
@@ -6766,16 +6713,16 @@ bool EditorComponent::CheckUnsavedChanges(int scene_index)
 
 void EditorComponent::FocusCameraOnSelected()
 {
-	Scene& scene = GetCurrentScene();
-	EditorScene& editorscene = GetCurrentEditorScene();
-	CameraComponent& camera = editorscene.camera;
+	Scene &scene = GetCurrentScene();
+	EditorScene &editorscene = GetCurrentEditorScene();
+	CameraComponent &camera = editorscene.camera;
 
 	AABB aabb;
 	XMVECTOR centerV = XMVectorSet(0, 0, 0, 0);
 	float count = 0;
-	for (auto& x : translator.selected)
+	for (auto &x : translator.selected)
 	{
-		TransformComponent* transform = scene.transforms.GetComponent(x.entity);
+		TransformComponent *transform = scene.transforms.GetComponent(x.entity);
 		if (transform == nullptr)
 			continue;
 
@@ -6789,7 +6736,7 @@ void EditorComponent::FocusCameraOnSelected()
 		if (scene.lights.Contains(x.entity))
 		{
 			size_t lightindex = scene.lights.GetIndex(x.entity);
-			const LightComponent& light = scene.lights[lightindex];
+			const LightComponent &light = scene.lights[lightindex];
 			if (light.GetType() == LightComponent::DIRECTIONAL)
 			{
 				// Directional light AABB is huge, so we handle this as special case:
@@ -6846,8 +6793,8 @@ void EditorComponent::FocusCameraOnSelected()
 
 XMFLOAT3 EditorComponent::GetPositionInFrontOfCamera() const
 {
-	const EditorScene& editorscene = GetCurrentEditorScene();
-	const CameraComponent& camera = editorscene.camera;
+	const EditorScene &editorscene = GetCurrentEditorScene();
+	const CameraComponent &camera = editorscene.camera;
 	XMFLOAT3 in_front_of_camera;
 	XMStoreFloat3(&in_front_of_camera, XMVectorAdd(camera.GetEye(), camera.GetAt() * 4));
 	return in_front_of_camera;
@@ -6855,13 +6802,13 @@ XMFLOAT3 EditorComponent::GetPositionInFrontOfCamera() const
 
 void EditorComponent::ReloadTerrainProps()
 {
-	Scene& scene = GetCurrentScene();
+	Scene &scene = GetCurrentScene();
 	bool any_reloaded = false;
 
 	for (size_t i = 0; i < scene.terrains.GetCount(); ++i)
 	{
-		wi::terrain::Terrain& terrain = scene.terrains[i];
-		for (wi::terrain::Prop& prop : terrain.props)
+		wi::terrain::Terrain &terrain = scene.terrains[i];
+		for (wi::terrain::Prop &prop : terrain.props)
 		{
 			if (prop.source_entity == wi::ecs::INVALID_ENTITY)
 			{
@@ -6876,8 +6823,7 @@ void EditorComponent::ReloadTerrainProps()
 				archive,
 				seri,
 				prop.source_entity,
-				wi::scene::Scene::EntitySerializeFlags::RECURSIVE | wi::scene::Scene::EntitySerializeFlags::KEEP_INTERNAL_ENTITY_REFERENCES
-			);
+				wi::scene::Scene::EntitySerializeFlags::RECURSIVE | wi::scene::Scene::EntitySerializeFlags::KEEP_INTERNAL_ENTITY_REFERENCES);
 			archive.WriteData(prop.data);
 			any_reloaded = true;
 		}
@@ -6905,7 +6851,7 @@ void EditorComponent::SetDefaultLocalization()
 
 	current_localization = default_localization;
 }
-void EditorComponent::SetLocalization(wi::Localization& loc)
+void EditorComponent::SetLocalization(wi::Localization &loc)
 {
 	current_localization = loc;
 	GetGUI().ImportLocalization(current_localization);
