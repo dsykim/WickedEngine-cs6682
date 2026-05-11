@@ -1580,7 +1580,28 @@ void EditorComponent::Start()
 
 	graphicsWnd.ApplySamplerSettings();
 
-	componentsWnd.RefreshEntityTree(); // called at Start() for updating the tree list when returning from scripts too
+	componentsWnd.RefreshEntityTree();
+
+	//cube
+	//Open("C:/Users/david/OneDrive/Desktop/CS/cs6682/cs6682-final-project/models/AnimatedCube.gltf");
+
+
+	//car
+
+	//Open("C:/Users/david/OneDrive/Desktop/CS/cs6682/cs6682-final-project/models/toycar/ToyCar.gltf");
+
+
+	//man
+
+
+	Open("C:/Users/david/OneDrive/Desktop/CS/cs6682/cs6682-final-project/models/man/CesiumMan.gltf");
+
+
+	//shaders
+
+	//renderPath->setFXAAEnabled(true);
+	//renderPath->setSharpenFilterEnabled(true);
+	// -----------------------------
 
 	RenderPath2D::Start();
 }
@@ -3413,6 +3434,35 @@ void EditorComponent::PostUpdate()
 			spline_renderer.Cut(spline.IsLooped());
 		}
 	}
+
+	static bool capturing = false;
+	static int captureFrame = 0;
+	static int captureFramesTotal = 4;
+	static int captureFrameIdx = 0;
+	static int captureFramePeriod = 15;
+
+	static std::string captureDir = "C:/Users/david/OneDrive/Desktop/CS/cs6682/cs6682-final-project/output";
+
+	if (wi::input::Press(wi::input::KEYBOARD_BUTTON_F9))
+	{
+		wi::helper::DirectoryCreate(captureDir);
+		capturing = true;
+		captureFrame = 0;
+		wi::backlog::post("[Capture] Started capturing frames...");
+	}
+
+	if (capturing && (captureFrame%captureFramePeriod==0) &&  captureFrameIdx< captureFramesTotal)
+	{
+		std::string filename = wi::helper::screenshot(main->swapChain);
+		wi::backlog::post("[Capture] Saved to: " + filename);
+		captureFrameIdx++;
+		if (captureFrameIdx >= captureFramesTotal)
+		{
+			capturing = false;
+			wi::backlog::post("[Capture] Done!");
+		}
+	}
+	captureFrame++;
 }
 void EditorComponent::PreRender()
 {
@@ -5483,85 +5533,106 @@ void EditorComponent::Open(std::string filename)
 			ImportModel_PLY(filename, *scene);
 		}
 
-		wi::eventhandler::Subscribe_Once(wi::eventhandler::EVENT_THREAD_SAFE_POINT, [=] (uint64_t userdata) {
+			wi::eventhandler::Subscribe_Once(wi::eventhandler::EVENT_THREAD_SAFE_POINT, [=] (uint64_t userdata) {
 
-			// Get the target scene (the one that was selected when Open was triggered)
-			// If it was closed during loading, a new empty tab is created as fallback
-			EditorScene& target_editorscene = GetOrCreateEditorSceneForLoading(target_scene_id);
-			wi::scene::Scene& target_scene = target_editorscene.scene;
+				// Get the target scene (the one that was selected when Open was triggered)
+				// If it was closed during loading, a new empty tab is created as fallback
+				EditorScene& target_editorscene = GetOrCreateEditorSceneForLoading(target_scene_id);
+				wi::scene::Scene& target_scene = target_editorscene.scene;
 
-			const size_t camera_count_prev = target_scene.cameras.GetCount();
-			const size_t transform_count_prev = target_scene.transforms.GetCount();
+				const size_t camera_count_prev = target_scene.cameras.GetCount();
+				const size_t transform_count_prev = target_scene.transforms.GetCount();
 
-			if (type == FileType::WISCENE && target_editorscene.path.empty())
-			{
-				target_editorscene.path = filename;
-			}
-
-			target_scene.Merge(*scene);
-
-			// Place the imported model in front of the camera:
-			if (type != FileType::WISCENE && generalWnd.placeInFrontOfCameraCheckBox.GetCheck())
-			{
-				// Imported models always have a root transform entity
-				if (transform_count_prev < target_scene.transforms.GetCount())
+				if (type == FileType::WISCENE && target_editorscene.path.empty())
 				{
-					const Entity rootEntity = target_scene.transforms.GetEntity(transform_count_prev);
-					TransformComponent* transform = target_scene.transforms.GetComponent(rootEntity);
-					if (transform != nullptr)
-					{
-						transform->translation_local = GetPositionInFrontOfCamera();
-						transform->SetDirty();
-					}
+					target_editorscene.path = filename;
 				}
-			}
 
-			// Detect when the new scene contains a new camera, and snap the camera onto it:
-			const size_t camera_count = target_scene.cameras.GetCount();
-			if (camera_count > 0 && camera_count > camera_count_prev)
-			{
-				const Entity entity = target_scene.cameras.GetEntity(camera_count_prev);
-				if (entity != INVALID_ENTITY)
+				target_scene.Merge(*scene);
+
+				// Play all animations
+				for (size_t i = 0; i < target_scene.animations.GetCount(); ++i)
 				{
-					const CameraComponent* cam = target_scene.cameras.GetComponent(entity);
-					if (cam != nullptr)
-					{
-						target_editorscene.camera.Eye = cam->Eye;
-						target_editorscene.camera.At = cam->At;
-						target_editorscene.camera.Up = cam->Up;
-						target_editorscene.camera.fov = cam->fov;
-						target_editorscene.camera.zNearP = cam->zNearP;
-						target_editorscene.camera.zFarP = cam->zFarP;
-						target_editorscene.camera.focal_length = cam->focal_length;
-						target_editorscene.camera.aperture_size = cam->aperture_size;
-						target_editorscene.camera.aperture_shape = cam->aperture_shape;
-						// camera aspect should be always for the current screen
-						target_editorscene.camera.width = (float)renderPath->GetInternalResolution().x;
-						target_editorscene.camera.height = (float)renderPath->GetInternalResolution().y;
+					target_scene.animations[i].Play();
+				}
 
-						const TransformComponent* camera_transform = target_scene.transforms.GetComponent(entity);
-						if (camera_transform != nullptr)
+				// Place the imported model in front of the camera:
+				if (type != FileType::WISCENE && generalWnd.placeInFrontOfCameraCheckBox.GetCheck())
+				{
+					// Imported models always have a root transform entity
+					if (transform_count_prev < target_scene.transforms.GetCount())
+					{
+						const Entity rootEntity = target_scene.transforms.GetEntity(transform_count_prev);
+						TransformComponent* transform = target_scene.transforms.GetComponent(rootEntity);
+						if (transform != nullptr)
 						{
-							target_editorscene.camera_transform = *camera_transform;
-							target_editorscene.camera.TransformCamera(target_editorscene.camera_transform);
+							transform->translation_local = GetPositionInFrontOfCamera();
+							transform->SetDirty();
 						}
-
-						target_editorscene.camera.UpdateCamera();
 					}
 				}
-			}
-			RefreshSceneList();
+				// Place the imported model in front of the camera:
+				if (type != FileType::WISCENE && generalWnd.placeInFrontOfCameraCheckBox.GetCheck())
+				{
+					// Imported models always have a root transform entity
+					if (transform_count_prev < target_scene.transforms.GetCount())
+					{
+						const Entity rootEntity = target_scene.transforms.GetEntity(transform_count_prev);
+						TransformComponent* transform = target_scene.transforms.GetComponent(rootEntity);
+						if (transform != nullptr)
+						{
+							transform->translation_local = GetPositionInFrontOfCamera();
+							transform->SetDirty();
+						}
+					}
+				}
 
-			componentsWnd.weatherWnd.UpdateData();
-			componentsWnd.RefreshEntityTree();
+				// Detect when the new scene contains a new camera, and snap the camera onto it:
+				const size_t camera_count = target_scene.cameras.GetCount();
+				if (camera_count > 0 && camera_count > camera_count_prev)
+				{
+					const Entity entity = target_scene.cameras.GetEntity(camera_count_prev);
+					if (entity != INVALID_ENTITY)
+					{
+						const CameraComponent* cam = target_scene.cameras.GetComponent(entity);
+						if (cam != nullptr)
+						{
+							target_editorscene.camera.Eye = cam->Eye;
+							target_editorscene.camera.At = cam->At;
+							target_editorscene.camera.Up = cam->Up;
+							target_editorscene.camera.fov = cam->fov;
+							target_editorscene.camera.zNearP = cam->zNearP;
+							target_editorscene.camera.zFarP = cam->zFarP;
+							target_editorscene.camera.focal_length = cam->focal_length;
+							target_editorscene.camera.aperture_size = cam->aperture_size;
+							target_editorscene.camera.aperture_shape = cam->aperture_shape;
+							// camera aspect should be always for the current screen
+							target_editorscene.camera.width = (float)renderPath->GetInternalResolution().x;
+							target_editorscene.camera.height = (float)renderPath->GetInternalResolution().y;
 
-			target_editorscene.has_unsaved_changes = false;
-			RefreshSceneList();
+							const TransformComponent* camera_transform = target_scene.transforms.GetComponent(entity);
+							if (camera_transform != nullptr)
+							{
+								target_editorscene.camera_transform = *camera_transform;
+								target_editorscene.camera.TransformCamera(target_editorscene.camera_transform);
+							}
 
-			wi::backlog::post("[Editor] finished loading model: " + filename);
+							target_editorscene.camera.UpdateCamera();
+						}
+					}
+				}
+				RefreshSceneList();
+
+				componentsWnd.weatherWnd.UpdateData();
+				componentsWnd.RefreshEntityTree();
+
+				target_editorscene.has_unsaved_changes = false;
+				RefreshSceneList();
+
+				wi::backlog::post("[Editor] finished loading model: " + filename);
+			});
 		});
-	});
-}
+	}
 void EditorComponent::Save(const std::string& filename)
 {
 	struct SetAndClearFlagOnExit {
