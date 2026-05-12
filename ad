@@ -1,0 +1,29 @@
+[35mWickedEngine/wiLoadingScreen_BindLua.cpp[m[36m:[m[32m34[m[36m:[m		lunamethod(LoadingScreen_BindLua, Add[1;31mLoadModel[mTask),
+[35mWickedEngine/wiLoadingScreen_BindLua.cpp[m[36m:[m[32m48[m[36m:[m	int LoadingScreen_BindLua::Add[1;31mLoadModel[mTask(lua_State* L)
+[35mWickedEngine/wiLoadingScreen_BindLua.cpp[m[36m:[m[32m53[m[36m:[m			wi::lua::SError(L, "Add[1;31mLoadModel[mTask(Scene scene, string fileName, opt Matrix transform): loading screen is invalid!");
+[35mWickedEngine/wiLoadingScreen_BindLua.cpp[m[36m:[m[32m77[m[36m:[m							wi::lua::SError(L, "Add[1;31mLoadModel[mTask(Scene scene, string fileName, opt Matrix transform) argument is not a matrix!");
+[35mWickedEngine/wiLoadingScreen_BindLua.cpp[m[36m:[m[32m83[m[36m:[m						wi::scene::[1;31mLoadModel[m2(scene, fileName, transform, root);
+[35mWickedEngine/wiLoadingScreen_BindLua.cpp[m[36m:[m[32m96[m[36m:[m					wi::lua::SError(L, "Add[1;31mLoadModel[mTask(Scene scene, string fileName, opt Matrix transform) not enough arguments!");
+[35mWickedEngine/wiLoadingScreen_BindLua.cpp[m[36m:[m[32m114[m[36m:[m						wi::lua::SError(L, "Add[1;31mLoadModel[mTask(string fileName, opt Matrix transform) argument is not a matrix!");
+[35mWickedEngine/wiLoadingScreen_BindLua.cpp[m[36m:[m[32m120[m[36m:[m					wi::scene::[1;31mLoadModel[m2(scene, fileName, transform, root);
+[35mWickedEngine/wiLoadingScreen_BindLua.cpp[m[36m:[m[32m134[m[36m:[m			wi::lua::SError(L, "Add[1;31mLoadModel[mTask(string fileName, opt Matrix transform) not enough arguments!");
+[35mWickedEngine/wiLoadingScreen_BindLua.h[m[36m:[m[32m28[m[36m:[m		int Add[1;31mLoadModel[mTask(lua_State* L);
+[35mWickedEngine/wiScene.cpp[m[36m:[m[32m8986[m[36m:[m	Entity [1;31mLoadModel[m(const std::string& fileName, const XMMATRIX& transformMatrix, bool attached)
+[35mWickedEngine/wiScene.cpp[m[36m:[m[32m8993[m[36m:[m		[1;31mLoadModel[m2(fileName, transformMatrix, rootEntity);
+[35mWickedEngine/wiScene.cpp[m[36m:[m[32m8997[m[36m:[m	Entity [1;31mLoadModel[m(Scene& scene, const std::string& fileName, const XMMATRIX& transformMatrix, bool attached)
+[35mWickedEngine/wiScene.cpp[m[36m:[m[32m9004[m[36m:[m		[1;31mLoadModel[m2(scene, fileName, transformMatrix, rootEntity);
+[35mWickedEngine/wiScene.cpp[m[36m:[m[32m9008[m[36m:[m	void [1;31mLoadModel[m2(const std::string& fileName, const XMMATRIX& transformMatrix, Entity rootEntity)
+[35mWickedEngine/wiScene.cpp[m[36m:[m[32m9011[m[36m:[m		[1;31mLoadModel[m2(scene, fileName, transformMatrix, rootEntity);
+[35mWickedEngine/wiScene.cpp[m[36m:[m[32m9015[m[36m:[m	void [1;31mLoadModel[m2(Scene& scene, const std::string& fileName, const XMMATRIX& transformMatrix, Entity rootEntity)
+[35mWickedEngine/wiScene.h[m[36m:[m[32m681[m[36m:[m	wi::ecs::Entity [1;31mLoadModel[m(const std::string& fileName, const XMMATRIX& transformMatrix = XMMatrixIdentity(), bool attached = false);
+[35mWickedEngine/wiScene.h[m[36m:[m[32m690[m[36m:[m	wi::ecs::Entity [1;31mLoadModel[m(Scene& scene, const std::string& fileName, const XMMATRIX& transformMatrix = XMMatrixIdentity(), bool attached = false);
+[35mWickedEngine/wiScene.h[m[36m:[m[32m696[m[36m:[m	void [1;31mLoadModel[m2(const std::string& fileName, const XMMATRIX& transformMatrix = XMMatrixIdentity(), wi::ecs::Entity rootEntity = wi::ecs::INVALID_ENTITY);
+[35mWickedEngine/wiScene.h[m[36m:[m[32m703[m[36m:[m	void [1;31mLoadModel[m2(Scene& scene, const std::string& fileName, const XMMATRIX& transformMatrix = XMMatrixIdentity(), wi::ecs::Entity rootEntity = wi::ecs::INVALID_ENTITY);
+[35mWickedEngine/wiScene_BindLua.cpp[m[36m:[m[32m66[m[36m:[mint [1;31mLoadModel[m(lua_State* L)
+[35mWickedEngine/wiScene_BindLua.cpp[m[36m:[m[32m88[m[36m:[m						wi::lua::SError(L, "[1;31mLoadModel[m(Scene scene, string fileName, opt Matrix transform) argument is not a matrix!");
+[35mWickedEngine/wiScene_BindLua.cpp[m[36m:[m[32m91[m[36m:[m				Entity root = wi::scene::[1;31mLoadModel[m(*custom_scene->scene, fileName, transform, true);
+[35mWickedEngine/wiScene_BindLua.cpp[m[36m:[m[32m97[m[36m:[m				wi::lua::SError(L, "[1;31mLoadModel[m(Scene scene, string fileName, opt Matrix transform) not enough arguments!");
+[35mWickedEngine/wiScene_BindLua.cpp[m[36m:[m[32m115[m[36m:[m					wi::lua::SError(L, "[1;31mLoadModel[m(string fileName, opt Matrix transform) argument is not a matrix!");
+[35mWickedEngine/wiScene_BindLua.cpp[m[36m:[m[32m119[m[36m:[m			Entity root = wi::scene::[1;31mLoadModel[m(scene, fileName, transform, true);
+[35mWickedEngine/wiScene_BindLua.cpp[m[36m:[m[32m127[m[36m:[m		wi::lua::SError(L, "[1;31mLoadModel[m(string fileName, opt Matrix transform) not enough arguments!");
+[35mWickedEngine/wiScene_BindLua.cpp[m[36m:[m[32m491[m[36m:[m		wi::lua::RegisterFunc("[1;31mLoadModel[m", [1;31mLoadModel[m);

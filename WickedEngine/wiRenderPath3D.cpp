@@ -86,6 +86,7 @@ namespace wi
 
 	void RenderPath3D::ResizeBuffers()
 	{
+		std::cout << "[WI] ResizeBuffers called, msaaSampleCount=" << msaaSampleCount << "\n" << std::flush;
 		first_frame = true;
 		DeleteGPUResources();
 
@@ -121,6 +122,9 @@ namespace wi
 			else
 			{
 				rtMain_render = rtMain;
+				std::cout << "[WI] ResizeBuffers: aliased rtMain_render=" << (void*)&rtMain_render
+					<< " rtMain=" << (void*)&rtMain << "\n" << std::flush;
+
 			}
 		}
 		{
@@ -1384,6 +1388,7 @@ namespace wi
 				vp.max_depth = 1;
 				device->BindViewports(1, &vp, cmd);
 
+				
 				wi::renderer::DrawScene(
 					visibility_reflection,
 					RENDERPASS_MAIN,
@@ -1417,7 +1422,6 @@ namespace wi
 				wi::renderer::DrawSpritesAndFonts(*scene, camera_reflection, false, cmd);
 
 				device->RenderPassEnd(cmd);
-
 				wi::profiler::EndRange(range); // Planar Reflections
 				device->EventEnd(cmd);
 			});
@@ -1430,7 +1434,7 @@ namespace wi
 
 			GraphicsDevice* device = wi::graphics::GetDevice();
 			device->EventBegin("Opaque Scene", cmd);
-
+			std::cout << "[WI] OPAQUE color pass entered\n" << std::flush;
 			wi::renderer::BindCameraCB(
 				*camera,
 				camera_previous,
@@ -1525,13 +1529,18 @@ namespace wi
 				device->RenderPassEnd(cmd);
 				device->EventEnd(cmd);
 			}
-
+			std::cout << "[WI] OPAQUE binding rtMain_render=" << (void*)&rtMain_render
+				<< " rtMain=" << (void*)&rtMain << " same=" << (&rtMain_render == &rtMain) << "\n" << std::flush;
+			std::cout << "[WI] rtMain_render.sample_count=" << rtMain_render.desc.sample_count
+				<< " rtMain.sample_count=" << rtMain.desc.sample_count
+				<< " getMSAASampleCount()=" << getMSAASampleCount() << "\n" << std::flush;
 			RenderPassImage rp[4] = {};
 			uint32_t rp_count = 0;
 			rp[rp_count++] = RenderPassImage::RenderTarget(
 				&rtMain_render,
 				visibility_shading_in_compute ? RenderPassImage::LoadOp::LOAD : RenderPassImage::LoadOp::CLEAR
 			);
+
 			if (device->CheckCapability(GraphicsDeviceCapability::VARIABLE_RATE_SHADING_TIER2) && rtShadingRate.IsValid())
 			{
 				rp[rp_count++] = RenderPassImage::ShadingRateSource(&rtShadingRate, ResourceState::UNORDERED_ACCESS, ResourceState::UNORDERED_ACCESS);
@@ -1558,6 +1567,7 @@ namespace wi
 			}
 			else
 			{
+				std::cout << "[WI] OPAQUE DrawScene MAIN, visibleObjects=" << visibility_main.visibleObjects.size() << "\n" << std::flush;
 				auto range = wi::profiler::BeginRangeGPU("Opaque Scene", cmd);
 
 				// Foreground:
@@ -2335,6 +2345,9 @@ namespace wi
 	}
 	void RenderPath3D::RenderPostprocessChain(CommandList cmd) const
 	{
+		std::cout << "[WI] PostprocessChain entered\n" << std::flush;
+		// at the end:
+		std::cout << "[WI] PostprocessChain enterdas dasdased\n" << std::flush;
 		GraphicsDevice* device = wi::graphics::GetDevice();
 
 		wi::renderer::BindCommonResources(cmd);

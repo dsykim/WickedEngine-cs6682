@@ -68,6 +68,8 @@ namespace wi::renderer
 
 	//IsaacShaderTag1
 	inline static const std::string localShaderPath = "../../../../src/shaders/";
+	//inline static const std::string localShaderPath = "C:/VSCode/CS6682/cs6682-final-project/src/shaders/";
+	//inline static const std::string localShaderPath = "C:/VSCode/CS6682/cs6682-final-project/external/WickedEngine/Editor/shaders/hlsl6/";
 
 	// Returns a buffer preinitialized for quad index buffer laid out as:
 	//	vertexID * 4 + [0, 1, 2, 2, 1, 3]
