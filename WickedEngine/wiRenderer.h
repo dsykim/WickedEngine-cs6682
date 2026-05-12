@@ -66,6 +66,9 @@ namespace wi::renderer
 	const wi::graphics::GPUBuffer* GetBuffer(wi::enums::BUFFERTYPES id);
 	const wi::graphics::Texture* GetTexture(wi::enums::TEXTYPES id);
 
+	//IsaacShaderTag1
+	inline static const std::string localShaderPath = "../../../../src/shaders/";
+
 	// Returns a buffer preinitialized for quad index buffer laid out as:
 	//	vertexID * 4 + [0, 1, 2, 2, 1, 3]
 	//	Note: it will return 16-bit or 32-bit index buffer depending on max_quad_count
@@ -891,6 +894,14 @@ namespace wi::renderer
 		const wi::graphics::Texture& output,
 		wi::graphics::CommandList cmd,
 		float amount = 1.0f
+	);
+	//IsaacShaderTag2
+	void Postprocess_PixelShader(
+		const wi::graphics::Texture& input,
+		const wi::graphics::Texture& output,
+		wi::graphics::CommandList cmd,
+		float pixel_size = 8.0f,
+		int quantize_count = -1
 	);
 	void Postprocess_CRT(
 		const wi::graphics::Texture& input,

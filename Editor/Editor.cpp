@@ -1574,6 +1574,7 @@ void EditorComponent::Start()
 
 	// renderPath->setFXAAEnabled(true);
 	// renderPath->setSharpenFilterEnabled(true);
+	renderPath->setPixelShaderEnabled(true);
 	//  -----------------------------
 
 	RenderPath2D::Start();

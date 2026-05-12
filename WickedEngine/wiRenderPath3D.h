@@ -80,6 +80,9 @@ namespace wi
 		bool depthOfFieldEnabled = true;
 		bool eyeAdaptionEnabled = false;
 		bool sharpenFilterEnabled = false;
+		//IsaacShaderTag1
+		bool pixelShaderEnabled = false;
+
 		bool outlineEnabled = false;
 		bool chromaticAberrationEnabled = false;
 		bool ditherEnabled = true;
@@ -268,6 +271,8 @@ namespace wi
 		constexpr bool getShadowsEnabled() const { return shadowsEnabled; }
 		constexpr bool getReflectionsEnabled() const { return reflectionsEnabled; }
 		constexpr bool getFXAAEnabled() const { return fxaaEnabled; }
+		//IsaacShaderTag2
+		constexpr bool getPixelShaderEnabled() const { return pixelShaderEnabled; }
 		constexpr bool getBloomEnabled() const { return bloomEnabled; }
 		constexpr bool getColorGradingEnabled() const { return colorGradingEnabled; }
 		constexpr bool getVolumeLightsEnabled() const { return volumeLightsEnabled; }
@@ -337,6 +342,8 @@ namespace wi
 		void setOutlineEnabled(bool value);
 		constexpr void setShadowsEnabled(bool value) { shadowsEnabled = value; }
 		constexpr void setFXAAEnabled(bool value) { fxaaEnabled = value; }
+		//IsaacShaderTag3
+		constexpr void setPixelShaderEnabled(bool value) { pixelShaderEnabled = value; }
 		constexpr void setColorGradingEnabled(bool value) { colorGradingEnabled = value; }
 		constexpr void setLensFlareEnabled(bool value) { lensFlareEnabled = value; }
 		constexpr void setSharpenFilterEnabled(bool value) { sharpenFilterEnabled = value; }

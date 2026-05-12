@@ -1069,6 +1069,8 @@ void LoadShaders()
 	wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args) { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_FXAA], "fxaaCS.cso"); });
 	wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args) { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_TEMPORALAA], "temporalaaCS.cso"); });
 	wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args) { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_SHARPEN], "sharpenCS.cso"); });
+	//IsaacShaderTag1
+	wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args) { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_PIXELSHADER], wi::renderer::localShaderPath + "PixelShader.cso"); });
 	wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args) { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_CRT], "crt_screenCS.cso"); });
 	wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args) { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_TONEMAP], "tonemapCS.cso"); });
 	wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args) { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_UNDERWATER], "underwaterCS.cso"); });
@@ -17113,6 +17115,52 @@ void Postprocess_Sharpen(
 
 	device->EventEnd(cmd);
 }
+
+//IsaacShaderTag2
+void Postprocess_PixelShader(
+	const Texture& input,
+	const Texture& output,
+	CommandList cmd,
+	float pixel_size,
+	int quantize_count
+)
+{
+	device->EventBegin("Postprocess_PixelShader", cmd);
+	device->BindComputeShader(&shaders[CSTYPE_POSTPROCESS_PIXELSHADER], cmd);
+	device->BindResource(&input, 0, cmd);
+
+	const TextureDesc& desc = output.GetDesc();
+
+	struct Constants {
+		float pixelSize;
+		int paletteSize;
+	};
+	Constants c;
+	c.pixelSize = pixel_size;
+	c.paletteSize = quantize_count;
+	device->PushConstants(&c, sizeof(c), cmd);
+
+	const GPUResource* uavs[] = { &output };
+	device->BindUAVs(uavs, 0, arraysize(uavs), cmd);
+
+	device->Barrier(GPUBarrier::Image(&output, output.desc.layout, ResourceState::UNORDERED_ACCESS), cmd);
+	device->ClearUAV(&output, 0, cmd);
+	device->Barrier(GPUBarrier::Memory(&output), cmd);
+
+	device->Dispatch(
+		(desc.width + POSTPROCESS_BLOCKSIZE - 1) / POSTPROCESS_BLOCKSIZE,
+		(desc.height + POSTPROCESS_BLOCKSIZE - 1) / POSTPROCESS_BLOCKSIZE,
+		1,
+		cmd
+	);
+
+	device->Barrier(GPUBarrier::Image(&output, ResourceState::UNORDERED_ACCESS, output.desc.layout), cmd);
+	device->EventEnd(cmd);
+}
+
+
+
+
 void Postprocess_CRT(
 	const Texture& input,
 	const Texture& output,
