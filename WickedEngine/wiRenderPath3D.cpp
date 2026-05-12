@@ -122,9 +122,6 @@ namespace wi
 			else
 			{
 				rtMain_render = rtMain;
-				std::cout << "[WI] ResizeBuffers: aliased rtMain_render=" << (void *)&rtMain_render
-						  << " rtMain=" << (void *)&rtMain << "\n"
-						  << std::flush;
 			}
 		}
 		{
@@ -384,22 +381,9 @@ namespace wi
 		for (size_t i = 0; i < scene->aabb_objects.size(); ++i)
 		{
 			auto &aabb = scene->aabb_objects[i];
-			std::cout << "[WI] Object " << i << " AABB min=("
-					  << aabb._min.x << "," << aabb._min.y << "," << aabb._min.z
-					  << ") max=(" << aabb._max.x << "," << aabb._max.y << "," << aabb._max.z
-					  << ") renderable=" << scene->objects[i].IsRenderable() << "\n"
-					  << std::flush;
 		}
 
 		wi::renderer::UpdateVisibility(visibility_main);
-		// Find the UpdateVisibility call, add after it:
-		std::cout << "[WI] Camera frustum planes valid: "
-				  << (visibility_main.camera != nullptr) << "\n"
-				  << std::flush;
-		std::cout << "[WI] Visibility: objects=" << visibility_main.scene->objects.GetCount()
-				  << " visibleObjects=" << visibility_main.visibleObjects.size() << "\n"
-				  << std::flush;
-
 		if (visibility_main.planar_reflection_visible)
 		{
 			// Frustum culling for planar reflections:
@@ -837,9 +821,6 @@ namespace wi
 
 	void RenderPath3D::Render() const
 	{
-		std::cout << "[WI] RenderPath3D::Render() entered, scene="
-				  << scene << " camera=" << camera << "\n"
-				  << std::flush;
 		if (!prerender_happened)
 		{
 			// Since 0.71.694: PreRender must be called before Render() because it sets up rendering resources!
@@ -884,8 +865,7 @@ namespace wi
 									   GPUBarrier::Image(&debugUAV, debugUAV.desc.layout, ResourceState::UNORDERED_ACCESS),
 									   GPUBarrier::Aliasing(&rtPostprocess, &rtPrimitiveID),
 								   };
-								   device->Barrier(barriers, arraysize(barriers), cmd);
-							   });
+								   device->Barrier(barriers, arraysize(barriers), cmd); });
 
 		// async compute parallel with depth prepass
 		cmd = device->BeginCommandList(QUEUE_COMPUTE);
@@ -927,8 +907,7 @@ namespace wi
 									   wi::renderer::DDGI(
 										   *scene,
 										   cmd);
-								   }
-							   });
+								   } });
 
 		static const uint32_t drawscene_flags =
 			wi::renderer::DRAWSCENE_OPAQUE |
@@ -990,9 +969,6 @@ namespace wi
 								   vp.height = (float)depthBuffer_Main.GetDesc().height;
 
 								   // Foreground:
-								   std::cout << "[WI] About to DrawScene PREPASS, visibleObjects="
-											 << visibility_main.visibleObjects.size() << "\n"
-											 << std::flush;
 								   vp.min_depth = 1 - foreground_depth_range;
 								   vp.max_depth = 1;
 								   device->BindViewports(1, &vp, cmd);
@@ -1017,8 +993,7 @@ namespace wi
 								   wi::profiler::EndRange(range);
 								   device->EventEnd(cmd);
 
-								   device->RenderPassEnd(cmd);
-							   });
+								   device->RenderPassEnd(cmd); });
 
 		// Main camera compute effects:
 		//	(async compute, parallel to "shadow maps" and "update textures",
@@ -1135,8 +1110,7 @@ namespace wi
 								   if (getMeshBlendEnabled() && visibility_main.IsMeshBlendVisible())
 								   {
 									   wi::renderer::PostProcess_MeshBlend_EdgeProcess(meshblendResources, cmd);
-								   }
-							   });
+								   } });
 
 		// Occlusion culling:
 		CommandList cmd_occlusionculling;
@@ -1238,8 +1212,7 @@ namespace wi
 									   }
 
 									   wi::profiler::EndRange(range); // Planar Reflections
-									   device->EventEnd(cmd);
-								   });
+									   device->EventEnd(cmd); });
 		}
 
 		CommandList cmd_ocean;
@@ -1497,11 +1470,6 @@ namespace wi
 				device->RenderPassEnd(cmd);
 				device->EventEnd(cmd);
 			}
-			std::cout << "[WI] OPAQUE binding rtMain_render=" << (void*)&rtMain_render
-				<< " rtMain=" << (void*)&rtMain << " same=" << (&rtMain_render == &rtMain) << "\n" << std::flush;
-			std::cout << "[WI] rtMain_render.sample_count=" << rtMain_render.desc.sample_count
-				<< " rtMain.sample_count=" << rtMain.desc.sample_count
-				<< " getMSAASampleCount()=" << getMSAASampleCount() << "\n" << std::flush;
 			RenderPassImage rp[4] = {};
 			uint32_t rp_count = 0;
 			rp[rp_count++] = RenderPassImage::RenderTarget(
