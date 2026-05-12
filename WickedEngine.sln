@@ -44,6 +44,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example_ImGui", "Samples\Ex
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Example_ImGui_Docking", "Samples\Example_ImGui_Docking\Example_ImGui_Docking.vcxproj", "{5646F9FB-C9E3-4DA4-8AAA-EB7A46DD777E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Renderer", "..\..\src\Renderer.vcxproj", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
+	ProjectSection(ProjectDependencies) = postProject
+		{06163DCB-B183-4ED9-9C62-13EF1658E049} = {06163DCB-B183-4ED9-9C62-13EF1658E049}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -108,6 +113,12 @@ Global
 		{5646F9FB-C9E3-4DA4-8AAA-EB7A46DD777E}.Release|ARM64.Build.0 = Release|ARM64
 		{5646F9FB-C9E3-4DA4-8AAA-EB7A46DD777E}.Release|x64.ActiveCfg = Release|x64
 		{5646F9FB-C9E3-4DA4-8AAA-EB7A46DD777E}.Release|x64.Build.0 = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|ARM64.ActiveCfg = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x64.ActiveCfg = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x64.Build.0 = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|ARM64.ActiveCfg = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x64.ActiveCfg = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
