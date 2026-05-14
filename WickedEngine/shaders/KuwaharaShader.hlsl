@@ -74,4 +74,5 @@ void main(uint3 id : SV_DispatchThreadID)
     }
 
     output[id.xy] = float4(result, input[coord].a);
+    output[id.xy] = float4(0.0, 1.0, 0.0, input[coord].a);
 }

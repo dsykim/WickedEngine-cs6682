@@ -17128,8 +17128,8 @@ namespace wi::renderer
 		float outline_thickness,
 		float outline_strength)
 	{
-		device->EventBegin("Postprocess_PixelShader", cmd);
-		device->BindComputeShader(&shaders[CSTYPE_POSTPROCESS_PIXELSHADER], cmd);
+		device->EventBegin("Postprocess_ToonShader", cmd);
+		device->BindComputeShader(&shaders[CSTYPE_POSTPROCESS_TOONSHADER], cmd);
 		device->BindResource(&input, 0, cmd);
 
 		const TextureDesc& desc = output.GetDesc();
@@ -17146,6 +17146,8 @@ namespace wi::renderer
 		c.outlineStrength = outline_strength;
 		device->PushConstants(&c, sizeof(c), cmd);
 
+		std::cout << "thickness " << c.outlineThickness << std::endl;
+		std::cout << "strength " << c.outlineStrength << std::endl;
 		const GPUResource* uavs[] = { &output };
 		device->BindUAVs(uavs, 0, arraysize(uavs), cmd);
 
@@ -17171,18 +17173,18 @@ namespace wi::renderer
 		CommandList cmd,
 		float radius)
 	{
-		device->EventBegin("Postprocess_PixelShader", cmd);
-		device->BindComputeShader(&shaders[CSTYPE_POSTPROCESS_PIXELSHADER], cmd);
+		device->EventBegin("Postprocess_KuwaharaShader", cmd);
+		device->BindComputeShader(&shaders[CSTYPE_POSTPROCESS_KUWAHARASHADER], cmd);
 		device->BindResource(&input, 0, cmd);
 
 		const TextureDesc& desc = output.GetDesc();
 
 		struct Constants
 		{
-			float radius;
+			int radius;
 		};
 		Constants c;
-		c.radius = radius;
+		c.radius = (int)radius;
 		device->PushConstants(&c, sizeof(c), cmd);
 
 		const GPUResource* uavs[] = { &output };

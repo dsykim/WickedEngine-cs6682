@@ -2450,7 +2450,7 @@ namespace wi
 			//IsaacShaderTag2
 			if (toonShaderEnabled)
 			{
-				wi::renderer::Postprocess_ToonShader(*rt_read, *rt_write, cmd, getToonShaderLevels(), getToonShaderStrength(), getToonShaderStrength());
+				wi::renderer::Postprocess_ToonShader(*rt_read, *rt_write, cmd, getToonShaderLevels(), getToonShaderThickness(), getToonShaderStrength());
 				std::swap(rt_read, rt_write);
 			}
 
