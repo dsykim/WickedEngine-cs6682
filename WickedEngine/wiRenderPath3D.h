@@ -371,7 +371,7 @@ namespace wi
 		//IsaacShaderTag7
 		constexpr void setPixelShaderEnabled(bool value, float size, float pallete) { pixelShaderEnabled = value; pixelShaderSize = size; pixelShaderPallete = pallete; }
 		constexpr void setToonShaderEnabled(bool value, float levels, float thickness, float strength) { toonShaderEnabled = value; toonShaderLevels = levels; toonShaderThickness = thickness; toonShaderStrength = strength; }
-		constexpr void setKuwaharaEnabled(bool value, float radius) { kuwaharaEnabled = value; kuwaharaRadius = radius}
+		constexpr void setKuwaharaEnabled(bool value, float radius) { kuwaharaEnabled = value; kuwaharaRadius = radius; }
 		constexpr void setColorGradingEnabled(bool value) { colorGradingEnabled = value; }
 		constexpr void setLensFlareEnabled(bool value) { lensFlareEnabled = value; }
 		constexpr void setSharpenFilterEnabled(bool value) { sharpenFilterEnabled = value; }
