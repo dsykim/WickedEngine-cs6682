@@ -67,7 +67,7 @@ namespace wi::renderer
 	const wi::graphics::Texture* GetTexture(wi::enums::TEXTYPES id);
 
 	//IsaacShaderTag1
-	inline static const std::string localShaderPath = "../../../../src/shaders/";
+	//inline static const std::string localShaderPath = "../../../../src/shaders/";
 	//inline static const std::string localShaderPath = "C:/VSCode/CS6682/cs6682-final-project/src/shaders/";
 	//inline static const std::string localShaderPath = "C:/VSCode/CS6682/cs6682-final-project/external/WickedEngine/Editor/shaders/hlsl6/";
 
@@ -904,6 +904,23 @@ namespace wi::renderer
 		wi::graphics::CommandList cmd,
 		float pixel_size = 8.0f,
 		int quantize_count = -1
+	);
+
+	//IsaacShaderTag3
+	void Postprocess_ToonShader(
+		const wi::graphics::Texture& input,
+		const wi::graphics::Texture& output,
+		wi::graphics::CommandList cmd,
+		float shading_level = 4.0f,
+		float outline_thickness = 4.0f,
+		float outline_strength = .2f
+	);
+	//IsaacShaderTag3
+	void Postprocess_KuwaharaShader(
+		const wi::graphics::Texture& input,
+		const wi::graphics::Texture& output,
+		wi::graphics::CommandList cmd,
+		float radius = 2.0f
 	);
 	void Postprocess_CRT(
 		const wi::graphics::Texture& input,

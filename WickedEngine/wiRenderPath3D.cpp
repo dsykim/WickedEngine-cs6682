@@ -2440,10 +2440,24 @@ namespace wi
 
 				std::swap(rt_read, rt_write);
 			}
-			// IsaacShaderTag1
+			//IsaacShaderTag1
 			if (pixelShaderEnabled)
 			{
-				wi::renderer::Postprocess_PixelShader(*rt_read, *rt_write, cmd);
+				wi::renderer::Postprocess_PixelShader(*rt_read, *rt_write, cmd, getPixelShaderSize(), getPixelShaderPallete());
+				std::swap(rt_read, rt_write);
+			}
+			
+			//IsaacShaderTag2
+			if (toonShaderEnabled)
+			{
+				wi::renderer::Postprocess_ToonShader(*rt_read, *rt_write, cmd, getToonShaderLevels(), getToonShaderStrength(), getToonShaderStrength());
+				std::swap(rt_read, rt_write);
+			}
+
+			//IsaacShaderTag3
+			if (kuwaharaEnabled)
+			{
+				wi::renderer::Postprocess_KuwaharaShader(*rt_read, *rt_write, cmd, getKuwaharaRadius() );
 				std::swap(rt_read, rt_write);
 			}
 

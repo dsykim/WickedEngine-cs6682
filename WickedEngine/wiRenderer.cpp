@@ -1232,7 +1232,11 @@ namespace wi::renderer
 							   { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_SHARPEN], "sharpenCS.cso"); });
 		// IsaacShaderTag1
 		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
-							   { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_PIXELSHADER], wi::renderer::localShaderPath + "PixelShader.cso"); });
+							   { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_PIXELSHADER],"PixelShader.cso"); });
+		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
+			{ LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_TOONSHADER], "ToonShader.cso"); });
+		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
+			{ LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_KUWAHARASHADER], "KuwaharaShader.cso"); });
 		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
 							   { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_CRT], "crt_screenCS.cso"); });
 		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
@@ -17113,6 +17117,91 @@ namespace wi::renderer
 		device->Barrier(GPUBarrier::Image(&output, ResourceState::UNORDERED_ACCESS, output.desc.layout), cmd);
 		device->EventEnd(cmd);
 	}
+
+
+	// IsaacShaderTag3
+	void Postprocess_ToonShader(
+		const Texture& input,
+		const Texture& output,
+		CommandList cmd,
+		float shading_levels,
+		float outline_thickness,
+		float outline_strength)
+	{
+		device->EventBegin("Postprocess_PixelShader", cmd);
+		device->BindComputeShader(&shaders[CSTYPE_POSTPROCESS_PIXELSHADER], cmd);
+		device->BindResource(&input, 0, cmd);
+
+		const TextureDesc& desc = output.GetDesc();
+
+		struct Constants {
+			float shadingLevels;
+			float outlineThickness;
+			float outlineStrength;
+		};
+
+		Constants c;
+		c.shadingLevels = shading_levels;
+		c.outlineThickness = outline_thickness;
+		c.outlineStrength = outline_strength;
+		device->PushConstants(&c, sizeof(c), cmd);
+
+		const GPUResource* uavs[] = { &output };
+		device->BindUAVs(uavs, 0, arraysize(uavs), cmd);
+
+		device->Barrier(GPUBarrier::Image(&output, output.desc.layout, ResourceState::UNORDERED_ACCESS), cmd);
+		device->ClearUAV(&output, 0, cmd);
+		device->Barrier(GPUBarrier::Memory(&output), cmd);
+
+		device->Dispatch(
+			(desc.width + POSTPROCESS_BLOCKSIZE - 1) / POSTPROCESS_BLOCKSIZE,
+			(desc.height + POSTPROCESS_BLOCKSIZE - 1) / POSTPROCESS_BLOCKSIZE,
+			1,
+			cmd);
+
+		device->Barrier(GPUBarrier::Image(&output, ResourceState::UNORDERED_ACCESS, output.desc.layout), cmd);
+		device->EventEnd(cmd);
+	}
+
+
+	// IsaacShaderTag4
+	void Postprocess_KuwaharaShader(
+		const Texture& input,
+		const Texture& output,
+		CommandList cmd,
+		float radius)
+	{
+		device->EventBegin("Postprocess_PixelShader", cmd);
+		device->BindComputeShader(&shaders[CSTYPE_POSTPROCESS_PIXELSHADER], cmd);
+		device->BindResource(&input, 0, cmd);
+
+		const TextureDesc& desc = output.GetDesc();
+
+		struct Constants
+		{
+			float radius;
+		};
+		Constants c;
+		c.radius = radius;
+		device->PushConstants(&c, sizeof(c), cmd);
+
+		const GPUResource* uavs[] = { &output };
+		device->BindUAVs(uavs, 0, arraysize(uavs), cmd);
+
+		device->Barrier(GPUBarrier::Image(&output, output.desc.layout, ResourceState::UNORDERED_ACCESS), cmd);
+		device->ClearUAV(&output, 0, cmd);
+		device->Barrier(GPUBarrier::Memory(&output), cmd);
+
+		device->Dispatch(
+			(desc.width + POSTPROCESS_BLOCKSIZE - 1) / POSTPROCESS_BLOCKSIZE,
+			(desc.height + POSTPROCESS_BLOCKSIZE - 1) / POSTPROCESS_BLOCKSIZE,
+			1,
+			cmd);
+
+		device->Barrier(GPUBarrier::Image(&output, ResourceState::UNORDERED_ACCESS, output.desc.layout), cmd);
+		device->EventEnd(cmd);
+	}
+
 
 	void Postprocess_CRT(
 		const Texture &input,

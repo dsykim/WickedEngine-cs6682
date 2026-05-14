@@ -80,8 +80,21 @@ namespace wi
 		bool depthOfFieldEnabled = true;
 		bool eyeAdaptionEnabled = false;
 		bool sharpenFilterEnabled = false;
+
 		//IsaacShaderTag1
 		bool pixelShaderEnabled = false;
+		float pixelShaderSize = 0;
+		int pixelShaderPallete = 0;
+
+		//IsaacShaderTag2
+		bool toonShaderEnabled = false;
+		float toonShaderLevels = 0;
+		float toonShaderThickness = 0;
+		float toonShaderStrength = 0;
+
+		//IsaacShaderTag3
+		bool kuwaharaEnabled = false;
+		float kuwaharaRadius = 0;
 
 		bool outlineEnabled = false;
 		bool chromaticAberrationEnabled = false;
@@ -271,8 +284,21 @@ namespace wi
 		constexpr bool getShadowsEnabled() const { return shadowsEnabled; }
 		constexpr bool getReflectionsEnabled() const { return reflectionsEnabled; }
 		constexpr bool getFXAAEnabled() const { return fxaaEnabled; }
-		//IsaacShaderTag2
+		//IsaacShaderTag4
 		constexpr bool getPixelShaderEnabled() const { return pixelShaderEnabled; }
+		constexpr float getPixelShaderSize() const { return pixelShaderSize; }
+		constexpr int getPixelShaderPallete() const { return pixelShaderPallete; }
+
+		//IsaacShaderTag5
+		constexpr bool getToonShaderEnabled() const { return toonShaderEnabled; }
+		constexpr float getToonShaderLevels() const { return toonShaderLevels; }
+		constexpr float getToonShaderThickness() const { return toonShaderThickness; }
+		constexpr float getToonShaderStrength() const { return toonShaderStrength; }
+
+		//IsaacShaderTag6
+		constexpr bool getKuwaharaShaderEnabled() const { return kuwaharaEnabled; }
+		constexpr float getKuwaharaRadius() const { return kuwaharaRadius; }
+
 		constexpr bool getBloomEnabled() const { return bloomEnabled; }
 		constexpr bool getColorGradingEnabled() const { return colorGradingEnabled; }
 		constexpr bool getVolumeLightsEnabled() const { return volumeLightsEnabled; }
@@ -342,8 +368,10 @@ namespace wi
 		void setOutlineEnabled(bool value);
 		constexpr void setShadowsEnabled(bool value) { shadowsEnabled = value; }
 		constexpr void setFXAAEnabled(bool value) { fxaaEnabled = value; }
-		//IsaacShaderTag3
-		constexpr void setPixelShaderEnabled(bool value) { pixelShaderEnabled = value; }
+		//IsaacShaderTag7
+		constexpr void setPixelShaderEnabled(bool value, float size, float pallete) { pixelShaderEnabled = value; pixelShaderSize = size; pixelShaderPallete = pallete; }
+		constexpr void setToonShaderEnabled(bool value, float levels, float thickness, float strength) { toonShaderEnabled = value; toonShaderLevels = levels; toonShaderThickness = thickness; toonShaderStrength = strength; }
+		constexpr void setKuwaharaEnabled(bool value, float radius) { kuwaharaEnabled = value; kuwaharaRadius = radius}
 		constexpr void setColorGradingEnabled(bool value) { colorGradingEnabled = value; }
 		constexpr void setLensFlareEnabled(bool value) { lensFlareEnabled = value; }
 		constexpr void setSharpenFilterEnabled(bool value) { sharpenFilterEnabled = value; }
