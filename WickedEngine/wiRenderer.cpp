@@ -1232,11 +1232,11 @@ namespace wi::renderer
 							   { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_SHARPEN], "sharpenCS.cso"); });
 		// IsaacShaderTag1
 		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
-							   { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_PIXELSHADER], localShaderPath+ "PixelShader.cso"); });
+							   { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_PIXELSHADER], "PixelShader.cso"); });
 		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
-			{ LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_TOONSHADER], localShaderPath + "ToonShader.cso"); });
+			{ LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_TOONSHADER], "ToonShader.cso"); });
 		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
-			{ LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_KUWAHARASHADER], localShaderPath + "KuwaharaShader.cso"); });
+			{ LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_KUWAHARASHADER], "KuwaharaShader.cso"); });
 		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
 							   { LoadShader(ShaderStage::CS, shaders[CSTYPE_POSTPROCESS_CRT], "crt_screenCS.cso"); });
 		wi::jobsystem::Execute(ctx, [](wi::jobsystem::JobArgs args)
