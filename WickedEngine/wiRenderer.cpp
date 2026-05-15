@@ -17123,6 +17123,7 @@ namespace wi::renderer
 	void Postprocess_ToonShader(
 		const Texture& input,
 		const Texture& output,
+		const Texture& depth,
 		CommandList cmd,
 		float shading_levels,
 		float outline_thickness,
@@ -17131,6 +17132,7 @@ namespace wi::renderer
 		device->EventBegin("Postprocess_ToonShader", cmd);
 		device->BindComputeShader(&shaders[CSTYPE_POSTPROCESS_TOONSHADER], cmd);
 		device->BindResource(&input, 0, cmd);
+		device->BindResource(&depth, 1, cmd);
 
 		const TextureDesc& desc = output.GetDesc();
 
@@ -17146,8 +17148,6 @@ namespace wi::renderer
 		c.outlineStrength = outline_strength;
 		device->PushConstants(&c, sizeof(c), cmd);
 
-		std::cout << "thickness " << c.outlineThickness << std::endl;
-		std::cout << "strength " << c.outlineStrength << std::endl;
 		const GPUResource* uavs[] = { &output };
 		device->BindUAVs(uavs, 0, arraysize(uavs), cmd);
 

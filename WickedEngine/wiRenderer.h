@@ -910,6 +910,7 @@ namespace wi::renderer
 	void Postprocess_ToonShader(
 		const wi::graphics::Texture& input,
 		const wi::graphics::Texture& output,
+		const wi::graphics::Texture& depth,
 		wi::graphics::CommandList cmd,
 		float shading_level = 4.0f,
 		float outline_thickness = 4.0f,

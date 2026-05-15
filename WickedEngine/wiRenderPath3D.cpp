@@ -3276,7 +3276,7 @@ namespace wi
 			
 		if (toonShaderEnabled)
 		{
-			wi::renderer::Postprocess_ToonShader(*rt_read, *rt_write, cmd, getToonShaderLevels(), getToonShaderThickness(), getToonShaderStrength());
+			wi::renderer::Postprocess_ToonShader(*rt_read, *rt_write, depthBuffer_Copy, cmd, getToonShaderLevels(), getToonShaderThickness(), getToonShaderStrength());
 			std::swap(rt_read, rt_write);
 		}
 
