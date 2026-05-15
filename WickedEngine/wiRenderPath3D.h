@@ -411,6 +411,9 @@ namespace wi
 		// Creates screenshot of the render result and replaces background (sky) pixels with transparency
 		wi::graphics::Texture CreateScreenshotWithAlphaBackground();
 
+		//Allows us to apply our custom shaders!
+		wi::graphics::Texture ApplyCustomShaders();
+
 		// This is an identifier of RenderPath subtype that is used for lua binding.
 		static constexpr const auto script_check_identifier = relative_path_storage(__FILE__);
 		const char* GetScriptBindingID() const override { return script_check_identifier.c_str(); }

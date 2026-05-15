@@ -2440,26 +2440,26 @@ namespace wi
 
 				std::swap(rt_read, rt_write);
 			}
-			//IsaacShaderTag1
-			if (pixelShaderEnabled)
-			{
-				wi::renderer::Postprocess_PixelShader(*rt_read, *rt_write, cmd, getPixelShaderSize(), getPixelShaderPallete());
-				std::swap(rt_read, rt_write);
-			}
-			
-			//IsaacShaderTag2
-			if (toonShaderEnabled)
-			{
-				wi::renderer::Postprocess_ToonShader(*rt_read, *rt_write, cmd, getToonShaderLevels(), getToonShaderThickness(), getToonShaderStrength());
-				std::swap(rt_read, rt_write);
-			}
+			////IsaacShaderTag1
+			//if (pixelShaderEnabled)
+			//{
+			//	wi::renderer::Postprocess_PixelShader(*rt_read, *rt_write, cmd, getPixelShaderSize(), getPixelShaderPallete());
+			//	std::swap(rt_read, rt_write);
+			//}
+			//
+			////IsaacShaderTag2
+			//if (toonShaderEnabled)
+			//{
+			//	wi::renderer::Postprocess_ToonShader(*rt_read, *rt_write, cmd, getToonShaderLevels(), getToonShaderThickness(), getToonShaderStrength());
+			//	std::swap(rt_read, rt_write);
+			//}
 
-			//IsaacShaderTag3
-			if (kuwaharaEnabled)
-			{
-				wi::renderer::Postprocess_KuwaharaShader(*rt_read, *rt_write, cmd, getKuwaharaRadius() );
-				std::swap(rt_read, rt_write);
-			}
+			////IsaacShaderTag3
+			//if (kuwaharaEnabled)
+			//{
+			//	wi::renderer::Postprocess_KuwaharaShader(*rt_read, *rt_write, cmd, getKuwaharaRadius() );
+			//	std::swap(rt_read, rt_write);
+			//}
 
 			if (getChromaticAberrationEnabled())
 			{
@@ -3229,6 +3229,70 @@ namespace wi
 		if (tex_resolved.IsValid())
 			return tex_resolved;
 		return tex;
+	}
+
+	//IsaacShaderTag0
+	//THIS IS WHERE I APPLY MY CUSTOM SHADERS :)
+	Texture RenderPath3D::ApplyCustomShaders() {
+
+		//get our device and cmd list!
+		GraphicsDevice* device = GetDevice();
+
+
+		//first start by calling CreateScreenshotWithAlphaBackground to get an alpha background version of the current rendered texture!
+		Texture currTex = CreateScreenshotWithAlphaBackground();
+		//check if its valid (hopefully)
+		if (!currTex.IsValid()) {
+			return { };
+		}
+		TextureDesc desc = currTex.GetDesc();
+
+		// Finish getting the tex before we touch it
+		device->SubmitCommandLists();
+		device->WaitForGPU();
+		CommandList cmd = device->BeginCommandList();
+
+
+		///create first ping pong texture
+		desc.bind_flags = BindFlag::SHADER_RESOURCE | BindFlag::UNORDERED_ACCESS;
+		Texture tex1;
+		device->CreateTexture(&desc, nullptr, &tex1);
+
+		device->CopyResource(&tex1, &currTex, cmd);
+		device->Barrier(GPUBarrier::Image(&tex1, ResourceState::COPY_DST, ResourceState::SHADER_RESOURCE), cmd);
+
+		//Here is our secondary pingpong texture
+		Texture tex2;
+		device->CreateTexture(&desc, nullptr, &tex2);
+		const Texture* rt_read = &tex1;
+		const Texture* rt_write = &tex2;
+
+		//Apply all our enabled shaders to our textures!
+		if (pixelShaderEnabled)
+		{
+			wi::renderer::Postprocess_PixelShader(*rt_read, *rt_write, cmd, getPixelShaderSize(), getPixelShaderPallete());
+			std::swap(rt_read, rt_write);
+		}
+			
+		if (toonShaderEnabled)
+		{
+			wi::renderer::Postprocess_ToonShader(*rt_read, *rt_write, cmd, getToonShaderLevels(), getToonShaderThickness(), getToonShaderStrength());
+			std::swap(rt_read, rt_write);
+		}
+
+		if (kuwaharaEnabled)
+		{
+			wi::renderer::Postprocess_KuwaharaShader(*rt_read, *rt_write, cmd, getKuwaharaRadius() );
+			std::swap(rt_read, rt_write);
+		}
+
+
+		//Now that the shaders are applied, once we wait for the GPU to finish up, we can return!
+
+		device->SubmitCommandLists();
+		device->WaitForGPU();
+		return *rt_read;
+
 	}
 
 }
